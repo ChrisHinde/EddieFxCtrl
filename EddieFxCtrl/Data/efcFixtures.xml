@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<efc:data type="fixtures" max_id="2"
+ xmlns:efc="http://diversum.se/apps/efc.xsd">
+  <efc:fixture id="0" company_id="0" type="2">
+    <efc:name>Generic dimmer</efc:name>
+    <efc:image></efc:image>
+    <efc:description>Generic dimmer</efc:description>
+    <efc:modes>
+      <efc:mode id="0">
+        <efc:name>Dimmer</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="10">
+            <efc:name>Dimmer</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+    </efc:modes>
+  </efc:fixture>
+  <efc:fixture id="1" company_id="0" type="2">
+    <efc:name>Generic par can</efc:name>
+    <efc:image></efc:image>
+    <efc:description>Generic par can</efc:description>
+    <efc:modes>
+      <efc:mode id="0">
+        <efc:name>Dimmer</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="10">
+            <efc:name>Dimmer</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+    </efc:modes>
+  </efc:fixture>
+  <efc:fixture id="2" company_id="0" type="3">
+    <efc:name>Generic RGB</efc:name>
+    <efc:image></efc:image>
+    <efc:description>Generic RGB</efc:description>
+    <efc:modes>
+      <efc:mode id="0">
+        <efc:name>RGB</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="4">
+            <efc:name>Red</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="2" type="5">
+            <efc:name>Green</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="3" type="6">
+            <efc:name>Blue</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+      <efc:mode id="1">
+        <efc:name>RGBW</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="4">
+            <efc:name>Red</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="2" type="5">
+            <efc:name>Green</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="3" type="6">
+            <efc:name>Blue</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="4" type="7">
+            <efc:name>White</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+      <efc:mode id="2">
+        <efc:name>RGB Dimmer</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="4">
+            <efc:name>Red</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="2" type="5">
+            <efc:name>Green</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="3" type="6">
+            <efc:name>Blue</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="4" type="11">
+            <efc:name>Dimmer</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+      <efc:mode id="3">
+        <efc:name>RGBW Dimmer</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="4">
+            <efc:name>Red</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="2" type="5">
+            <efc:name>Green</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="3" type="6">
+            <efc:name>Blue</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="4" type="7">
+            <efc:name>White</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="5" type="11">
+            <efc:name>Dimmer</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+      <efc:mode id="4">
+        <efc:name>Dimmer RGB</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="11">
+            <efc:name>Dimmer</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="2" type="4">
+            <efc:name>Red</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="3" type="5">
+            <efc:name>Green</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="4" type="6">
+            <efc:name>Blue</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+      <efc:mode id="5">
+        <efc:name>GRB</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="5">
+            <efc:name>Green</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="2" type="4">
+            <efc:name>Red</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="3" type="6">
+            <efc:name>Blue</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+      <efc:mode id="6">
+        <efc:name>GBR</efc:name>
+        <efc:channels>
+          <efc:channel channel="1" type="5">
+            <efc:name>Green</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="2" type="6">
+            <efc:name>Blue</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+          <efc:channel channel="3" type="4">
+            <efc:name>Red</efc:name>
+            <efc:description></efc:description>
+          </efc:channel>
+        </efc:channels>
+      </efc:mode>
+    </efc:modes>
+  </efc:fixture>
+</efc:data>

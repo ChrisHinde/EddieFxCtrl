@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="efc"
+    targetNamespace="http://diversum.se/apps/efc.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://diversum.se/apps/efc.xsd"
+    xmlns:efc="http://diversum.se/apps/efc.xsd"
+    xmlns:mstns="http://tempuri.org/efcData.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="data">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="company" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string"></xs:element>
+              <xs:element name="url" type="xs:anyURI"></xs:element>
+              <xs:element name="logo" type="xs:anyURI"></xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:int" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fixture" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string"></xs:element>
+              <xs:element name="image" type="xs:anyURI"></xs:element>
+              <xs:element name="description" type="xs:string"></xs:element>
+              <xs:element name="modes">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="mode" minOccurs="1" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="name" type="xs:string"></xs:element>
+                          <xs:element name="channels">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="channel" minOccurs="1" maxOccurs="512">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="name" type="xs:string"></xs:element>
+                                      <xs:element name="description" type="xs:string"></xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="channel" type="xs:int" />
+                                    <xs:attribute name="type" type="xs:int" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:int" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:int" />
+            <xs:attribute name="company_id" type="xs:int" />
+            <xs:attribute name="type" type="xs:int" />
+            <xs:attribute name="channels" type="xs:int" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="type" type="xs:string" />
+      <xs:attribute name="max_id" type="xs:int" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,128 @@
+﻿<Window x:Class="EddieFxCtrl.efcMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EddieFxCtrl"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:bot="http://schemas.thinkpixellab.com/2011/xaml/presentation"
+        mc:Ignorable="d"
+        Title="Eddie Fx Controller" Height="720" Width="900" WindowState="Maximized" Closing="Window_Closing">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:efcUICommands.Quit" CanExecute="GeneralCommand_CanExecute" Executed="QuitCommand_Executed" />
+        <CommandBinding Command="local:efcUICommands.Preferences" CanExecute="GeneralCommand_CanExecute" Executed="PreferencesCommand_Executed" />
+        <CommandBinding Command="local:efcUICommands.ScreenFixtures" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:efcUICommands.ScreenEffects" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:efcUICommands.ScreenScenes" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:efcUICommands.ScreenInfo" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:efcUICommands.ScreenOutput" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+    </Window.CommandBindings>
+    <DockPanel>
+        <Menu x:Name="menu" Height="21" DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <Separator/>
+                <MenuItem Command="local:efcUICommands.Quit" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <Separator/>
+                <MenuItem Command="local:efcUICommands.Preferences" />
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Screens">
+                    <MenuItem Command="local:efcUICommands.ScreenFixtures" />
+                    <MenuItem Command="local:efcUICommands.ScreenEffects" />
+                    <MenuItem Command="local:efcUICommands.ScreenScenes" />
+                    <MenuItem Command="local:efcUICommands.ScreenInfo" />
+                    <MenuItem Command="local:efcUICommands.ScreenOutput" />
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Commands">
+                <MenuItem Command="local:efcUICommands.Blackout" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+            </MenuItem>
+        </Menu>
+        <ToolBarTray Height="30" DockPanel.Dock="Top">
+            <ToolBar x:Name="outputToolBar" >
+                <Button x:Name="BlackoutOutputTB" VerticalAlignment="Stretch" HorizontalAlignment="Left">
+                    <TextBlock>Blackout</TextBlock>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <StatusBar x:Name="MainStatusBar" DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="MainStatus">Welcome to Eddie Fx!</TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+        <TabControl x:Name="MainTabCtrl" TabStripPlacement="Bottom">
+            <TabItem Header="_Fixtures" Name="FixturesTab">
+                <Grid/>
+            </TabItem>
+            <TabItem Header="_Effects" Name="EffectsTab">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="_Scenes" Name="ScenesTab">
+                <Grid/>
+            </TabItem>
+            <TabItem Header="_Info" Name="InfoTab">
+                <TabControl x:Name="InfoTabControl" >
+                    <TabItem Header="_General">
+                        <Grid />
+                    </TabItem>
+                    <TabItem Header="_Log">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="28" />
+                            </Grid.RowDefinitions>
+                            <TextBox x:Name="logTextBox" Grid.ColumnSpan="3" TextWrapping="Wrap" AcceptsReturn="True" Text="" />
+                            <Button Grid.Row="1" Grid.Column="0" Name="ClearLogBtn" Click="ClearLogBtn_Click">Clear Log</Button>
+                            <Button Grid.Row="1" Grid.Column="1" Name="SaveLogBtn" Click="SaveLogBtn_Click">Save Log</Button>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem Header="_Output"  Name="OutputTab">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="105" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="26" />
+                            <RowDefinition Height="26" />
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" Padding="0">Master</Label>
+                        <Label Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" Padding="0">Fade</Label>
+                        <Slider x:Name="masterSlider" Grid.Row="1" Maximum="255" LargeChange="5" Orientation="Vertical" SmallChange="1" TickFrequency="5" TickPlacement="Both" Margin="2" />
+                        <Slider x:Name="fadeSlider" Grid.Row="1" Grid.Column="1" Maximum="255" LargeChange="5" Orientation="Vertical" SmallChange="1" TickFrequency="5" TickPlacement="Both" Margin="2" />
+                        <xctk:IntegerUpDown Name="masterUpDown" Grid.Row="2" Minimum="0" Maximum="255" Margin="2" Value="{Binding ElementName=masterSlider,Path=Value, UpdateSourceTrigger=LostFocus}" >
+                        </xctk:IntegerUpDown>
+                        <xctk:IntegerUpDown Name="FadeUpDown" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding ElementName=fadeSlider,Path=Value, UpdateSourceTrigger=LostFocus}">
+                        </xctk:IntegerUpDown>
+                        <ComboBox x:Name="FadeSpeedUnitComboBox" Grid.Row="3" Grid.Column="1" >
+                            <ComboBoxItem Content="s/10" ToolTip="10th of seconds"/>
+                            <ComboBoxItem Content="s" ToolTip="Seconds" Selector.IsSelected="True"/>
+                            <ComboBoxItem Content="m" ToolTip="Minutes"/>
+                        </ComboBox>
+
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
+ 

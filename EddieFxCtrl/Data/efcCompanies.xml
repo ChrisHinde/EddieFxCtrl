@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<efc:data type="companies" max_id="1"
+ xmlns:efc="http://diversum.se/apps/efc.xsd">
+  <efc:company id="0">
+    <efc:name>Generic</efc:name>
+    <efc:url></efc:url>
+    <efc:logo></efc:logo>
+  </efc:company>
+  <efc:company id="1">
+    <efc:name>Diversum</efc:name>
+    <efc:url>http://diversum.se</efc:url>
+    <efc:logo></efc:logo>
+  </efc:company>
+</efc:data>
