@@ -3,14 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:EddieFxCtrl"
+        xmlns:local_classes="clr-namespace:EddieFxCtrl.Classes"
         mc:Ignorable="d"
-        Title="EFC - Preferences" Height="482" Width="425">
+        Title="EFC - Preferences" Height="530" Width="510"
+        WindowStartupLocation="CenterScreen" Icon="{DynamicResource Icon_Wrench}">
     <Window.CommandBindings>
-        <CommandBinding Command="local:efcPrefUICommands.Ok" CanExecute="OkCommand_CanExecute" Executed="OkCommand_Executed" />
+        <!--ommandBinding Command="local:efcPrefUICommands.Ok" CanExecute="OkCommand_CanExecute" Executed="OkCommand_Executed" /-->
     </Window.CommandBindings>
     <Window.Resources>
-        <local:efcMainWindow x:Key="Comp" />
+        <local:IsLastModeChannelConverter x:Key="IsLastModeChannelConverter" />
+        <ObjectDataProvider x:Key="ChannelTypes" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local_classes:efcChannelType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="MasterModes" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local_classes:efcMasterMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="BlackoutModes" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local_classes:efcBlackoutMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="efcOutputMode" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local_classes:efcOutputMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
         <DataTemplate x:Key="CompanyItemTemplate">
             <TextBlock Text="{Binding Name}" />
         </DataTemplate>
@@ -27,9 +54,9 @@
         </DataTemplate>
         <DataTemplate x:Key="FixtureModeChannelTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding FixtureChannel, StringFormat=#{0}: }" />
-                <TextBlock Text="{Binding Name}" />
-                <TextBlock Text="{Binding Type, StringFormat= ({0})}" />
+                <TextBlock Text="{Binding FixtureChannel, StringFormat='#{0}'}" />
+                <TextBox Text="{Binding Name}" Width="75" Margin="5,0,5,0" />
+                <ComboBox SelectedItem="{Binding Type}" ItemsSource="{Binding Source={StaticResource ChannelTypes}}" Width="90" />
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -44,9 +71,188 @@
         </Grid>
         <TabControl>
             <TabItem Name="GeneralPrefTab" Header="_General">
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Header="Master" Grid.Column="0">
+                            <StackPanel Orientation="Vertical" Margin="3">
+                                <Label>Mode:</Label>
+                                <ComboBox Name="MasterModeCombo" ItemsSource="{Binding Source={StaticResource MasterModes}}" />
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Blackout" Grid.Column="1">
+                            <StackPanel Orientation="Vertical" Margin="3">
+                                <Label>Mode:</Label>
+                                <ComboBox SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Source={StaticResource BlackoutModes}}"></ComboBox>
+                                <CheckBox Name="BlackoutDefault" Margin="0,6">Start with Blackout active</CheckBox>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+                </StackPanel>
             </TabItem>
             <TabItem Name="DataPrefTab" Header="_Data">
                 <TabControl>
+                    <TabItem Name="FixturesDataPrefTab" Header="_Fixtures">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <DockPanel Margin="3">
+                                <Grid DockPanel.Dock="Bottom">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="1*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Name="AddFixtureBtn" Margin="3">
+                                        <Button.Style>
+                                            <Style>
+                                                <Setter Property="Button.IsEnabled" Value="True" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=FixturesTreeView, Path=SelectedValue, FallbackValue=-1}" Value="-1">
+                                                        <Setter Property="Button.IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        _Add
+                                    </Button>
+                                    <Button Name="DelFixtureBtn" Grid.Column="1" Margin="3">
+                                        <Button.Style>
+                                            <Style>
+                                                <Setter Property="Button.IsEnabled" Value="True" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=FixturesTreeView, Path=SelectedItem.TotalChannelCount, FallbackValue=-1}" Value="-1">
+                                                        <Setter Property="Button.IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        _Delete
+                                    </Button>
+                                </Grid>
+                                <TreeView Name="FixturesTreeView" ItemTemplate="{StaticResource FixtureItemTemplate}" SelectedItemChanged="FixturesTreeView_SelectedItemChanged">
+                                </TreeView>
+                            </DockPanel>
+                            <GroupBox x:Name="FixtureGroupBox" Grid.Column="1" Header="Fixture info" Margin="3">
+                                <GroupBox.Style>
+                                    <Style>
+                                        <Setter Property="GroupBox.IsEnabled" Value="True" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=FixturesTreeView, Path=SelectedItem.TotalChannelCount, FallbackValue=-1}" Value="-1">
+                                                <Setter Property="GroupBox.IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </GroupBox.Style>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="20" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="60" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="1*" />
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="18" />
+                                    </Grid.RowDefinitions>
+                                    <Label Name="FixtureNameLabel"  Grid.Row="0" Margin="0" Padding="0" Target="{Binding ElementName=FixtureNameTextBox}">Name:</Label>
+                                    <TextBox Name="FixtureNameTextBox" Grid.Row="1" Grid.ColumnSpan="4" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Name}" />
+                                    <Label Name="FixtureImageLabel"  Grid.Row="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureImageTextBox}">Image:</Label>
+                                    <TextBox Name="FixtureImageTextBox" Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Image}" />
+                                    <Button x:Name="FixtureImageButton" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" Click="FixtureImageButton_Click">
+                                        <Image Margin="0" Source="{StaticResource Icon_Ellipsis}" />
+                                    </Button>
+                                    <Label Name="FixtureDescriptionLabel"  Grid.Row="4" Grid.ColumnSpan="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureDescriptionTextBox}">Description:</Label>
+                                    <TextBox Name="FixtureDescriptionTextBox" Grid.Row="5" Grid.ColumnSpan="4" TextWrapping="Wrap" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Description}" />
+                                    <Label Name="FixtureModesLabel"  Grid.Row="6" Grid.ColumnSpan="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureModesListBox}">Modes:</Label>
+                                    <ComboBox Name="FixtureModesComboBox" Grid.Row="7" Grid.ColumnSpan="2" ItemsSource="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Modes, Mode=TwoWay}" ItemTemplate="{StaticResource FixtureModeTemplate}" IsSynchronizedWithCurrentItem="True" SelectionChanged="FixtureModesCombBox_SelectionChanged" />
+                                    <Button Name="AddFixtureModeButton" Grid.Row="7" Grid.Column="2" ToolTip="Add mode" Click="AddFixtureModeButton_Click">
+                                        <Image Margin="0" Source="{StaticResource Icon_Add}" />
+                                    </Button>
+                                    <Button Name="RemoveFixtureModeButton" Grid.Row="7" Grid.Column="3" ToolTip="Remove mode" Click="RemoveFixtureModeButton_Click">
+                                        <Image Margin="0" Source="{StaticResource Icon_Remove}" />
+                                    </Button>
+                                    <Label Name="FixtureModeChannelsLabel"  Grid.Row="8" Grid.ColumnSpan="2" Margin="0" Padding="0">Mode channels:</Label>
+                                    <!--ListBox Name="FixtureModeChannelsListBox" Grid.Row="9" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding ElementName=FixtureModesComboBox, Path=SelectedItem.Channels, Mode=TwoWay}" ItemTemplate="{StaticResource FixtureModeChannelTemplate}" /-->
+                                    <DataGrid Name="FixtureModeChannelsDataGrid" Grid.Row="9" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding ElementName=FixtureModesComboBox, Path=SelectedItem.Channels, Mode=TwoWay}" AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="#" Binding="{Binding FixtureChannel}" IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="1*" IsReadOnly="False" />
+                                            <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={StaticResource ChannelTypes}}" Width="1*" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Button Name="FixtureModeChannelAddButton" Grid.Row="9" Grid.Column="3" Grid.ColumnSpan="1" ToolTip="Add channel" Click="FixtureModeChannelAddButton_Click">
+                                        <Image Margin="0" Source="{StaticResource Icon_Add}" />
+                                    </Button>
+                                    <Button Name="FixtureModeChannelRemoveButton" Grid.Row="10" Grid.Column="3" Grid.ColumnSpan="1" ToolTip="Remove channel" Click="FixtureModeChannelRemoveButton_Click">
+                                        <Button.Style>
+                                            <Style>
+                                                <Setter Property="Button.IsEnabled" Value="True" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=FixtureModeChannelsListBox, Path=SelectedIndex}" Value="-1" >
+                                                        <Setter Property="Button.IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <Image Margin="0" Source="{StaticResource Icon_Remove}" />
+                                    </Button>
+                                    <Button Name="FixtureModeChannelMoveUpButton" Grid.Row="11" Grid.Column="3" Grid.ColumnSpan="1" ToolTip="Move channel up" Click="FixtureModeChannelMoveUpButton_Click">
+                                        <Button.Style>
+                                            <Style>
+                                                <Setter Property="Button.IsEnabled" Value="True" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=FixtureModeChannelsListBox, Path=SelectedIndex}" Value="-1" >
+                                                        <Setter Property="Button.IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=FixtureModeChannelsListBox, Path=SelectedIndex}" Value="0" >
+                                                        <Setter Property="Button.IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <Image Margin="0" Source="{StaticResource Icon_Up}" />
+                                    </Button>
+                                    <Button Name="FixtureModeChannelMoveDownButton" Grid.Row="12" Grid.Column="3" Grid.ColumnSpan="1" ToolTip="Move channel down" Click="FixtureModeChannelMoveDownButton_Click">
+                                        <Button.Style>
+                                            <Style>
+                                                <Setter Property="Button.IsEnabled" Value="True" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=FixtureModeChannelsListBox, Path=SelectedIndex}" Value="-1" >
+                                                        <Setter Property="Button.IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=FixtureModeChannelsListBox, Path=SelectedIndex, Converter={StaticResource IsLastModeChannelConverter}}" Value="True" >
+                                                        <Setter Property="Button.IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <Image Margin="0" Source="{StaticResource Icon_Down}" />
+                                    </Button>
+                                    <Label Name="FixtureIdLabel"  Grid.Row="15" Margin="0" Padding="0">ID:</Label>
+                                    <Label Name="FixtureIdValueLabel"  Grid.Row="15" Grid.Column="1" Margin="0" Padding="0" Grid.ColumnSpan="2" Content="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Id, FallbackValue='-1'}" />
+                                </Grid>
+                            </GroupBox>
+                        </Grid>
+                    </TabItem>
                     <TabItem Name="CompaniesDataPrefTab" Header="_Companies">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -116,114 +322,11 @@
                                     <Label Name="CompanyUrlLabel"  Grid.Row="2" Margin="0" Padding="0" Target="{Binding ElementName=CompanyUrlTextBox}">URL:</Label>
                                     <TextBox Name="CompanyUrlTextBox" Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Url}"></TextBox>
                                     <Label Name="CompanyLogoLabel"  Grid.Row="4" Margin="0" Padding="0" Target="{Binding ElementName=CompanyLogoTextBox}">Logo:</Label>
-                                    <TextBox Name="CompanyLogoTextBox" Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Logo}"></TextBox>
+                                    <TextBox Name="CompanyLogoTextBox" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Logo}"></TextBox>
                                     <Label Name="CompanyFixturesLabel"  Grid.Row="7" Margin="0" Padding="0">Fixtures:</Label>
                                     <Label Name="CompanyFixturesValueLabel"  Grid.Row="7" Grid.Column="1" Margin="0" Padding="0" Grid.ColumnSpan="2" Content="{Binding ElementName=CompaniesListBox, Path=SelectedValue.FixtureCount, FallbackValue='0'}" />
                                     <Label Name="CompanyIdLabel"  Grid.Row="8" Margin="0" Padding="0">ID:</Label>
                                     <Label Name="CompanyIdValueLabel"  Grid.Row="8" Grid.Column="1" Margin="0" Padding="0" Grid.ColumnSpan="2" Content="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Id, FallbackValue='-1'}" />
-                                </Grid>
-                            </GroupBox>
-                        </Grid>
-                    </TabItem>
-                    <TabItem Name="FixturesDataPrefTab" Header="_Fixtures">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <DockPanel Margin="3">
-                                <Grid DockPanel.Dock="Bottom">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="1*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Button Name="AddFixtureBtn" Margin="3">_Add</Button>
-                                    <Button Name="DelFixtureBtn" Grid.Column="1" Margin="3">
-                                        <Button.Style>
-                                            <Style>
-                                                <Setter Property="Button.IsEnabled" Value="True" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=FixturesTreeView, Path=SelectedItem.TotalChannelCount, FallbackValue=-1}" Value="-1">
-                                                        <Setter Property="Button.IsEnabled" Value="False" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                        _Delete
-                                    </Button>
-                                </Grid>
-                                <TreeView Name="FixturesTreeView" ItemTemplate="{StaticResource FixtureItemTemplate}" SelectedItemChanged="FixturesTreeView_SelectedItemChanged">
-                                </TreeView>
-                            </DockPanel>
-                            <GroupBox x:Name="FixtureGroupBox" Grid.Column="1" Header="Fixture info" Margin="3">
-                                <GroupBox.Style>
-                                    <Style>
-                                        <Setter Property="GroupBox.IsEnabled" Value="True" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ElementName=FixturesTreeView, Path=SelectedItem.TotalChannelCount, FallbackValue=-1}" Value="-1">
-                                                <Setter Property="GroupBox.IsEnabled" Value="False" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </GroupBox.Style>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="3*" />
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition Width="20" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="18" />
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="18" />
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="18" />
-                                        <RowDefinition Height="60" />
-                                        <RowDefinition Height="18" />
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="18" />
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="20" />
-                                        <RowDefinition Height="1*" />
-                                        <RowDefinition Height="5" />
-                                        <RowDefinition Height="18" />
-                                    </Grid.RowDefinitions>
-                                    <Label Name="FixtureNameLabel"  Grid.Row="0" Margin="0" Padding="0" Target="{Binding ElementName=FixtureNameTextBox}">Name:</Label>
-                                    <TextBox Name="FixtureNameTextBox" Grid.Row="1" Grid.ColumnSpan="4" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Name}" />
-                                    <Label Name="FixtureImageLabel"  Grid.Row="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureImageTextBox}">Image:</Label>
-                                    <TextBox Name="FixtureImageTextBox" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Image}" />
-                                    <Button x:Name="FixtureImageButton" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2">
-                                        <Image Margin="0" Source="Resources\Images\Icon_Ellipsis.png" />
-                                    </Button>
-                                    <Label Name="FixtureDescriptionLabel"  Grid.Row="4" Grid.ColumnSpan="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureDescriptionTextBox}">Description:</Label>
-                                    <TextBox Name="FixtureDescriptionTextBox" Grid.Row="5" Grid.ColumnSpan="4" TextWrapping="Wrap" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Description}" />
-                                    <Label Name="FixtureModesLabel"  Grid.Row="6" Grid.ColumnSpan="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureModesListBox}">Modes:</Label>
-                                    <ComboBox Name="FixtureModesComboBox" Grid.Row="7" Grid.ColumnSpan="2" ItemsSource="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Modes}" ItemTemplate="{StaticResource FixtureModeTemplate}" IsSynchronizedWithCurrentItem="True" SelectionChanged="FixtureModesCombBox_SelectionChanged" IsEditable="True" />
-                                    <Button Name="AddFixtureModeButton" Grid.Row="7" Grid.Column="2" ToolTip="Add mode">
-                                        <Image Margin="0" Source="Resources\Images\Icon_Add.png" />
-                                    </Button>
-                                    <Button Name="RemoveFixtureModeButton" Grid.Row="7" Grid.Column="3" ToolTip="Remove mode">
-                                        <Image Margin="0" Source="Resources\Images\Icon_Remove.png" />
-                                    </Button>
-                                    <Label Name="FixtureModeChannelsLabel"  Grid.Row="8" Grid.ColumnSpan="2" Margin="0" Padding="0">Mode channels:</Label>
-                                    <ListBox Name="FixtureModeChannelsListBox" Grid.Row="9" Grid.ColumnSpan="2" Grid.RowSpan="5" />
-                                    <Button Name="FixtureModeChannelAddButton" Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" ToolTip="Add channel">
-                                        <Image Margin="0" Source="Resources\Images\Icon_Add.png" />
-                                    </Button>
-                                    <Button Name="FixtureModeChannelRemoveButton" Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" ToolTip="Remove channel">
-                                        <Image Margin="0" Source="Resources\Images\Icon_Remove.png" />
-                                    </Button>
-                                    <Button Name="FixtureModeChannelMoveUpButton" Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" ToolTip="Move channel up">
-                                        <Image Margin="0" Source="Resources\Images\Icon_Up_1.png" />
-                                    </Button>
-                                    <Button Name="FixtureModeChannelMoveDownButton" Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="2" ToolTip="Move channel down">
-                                        <Image Margin="0" Source="Resources\Images\Icon_Down_1.png" />
-                                    </Button>
-                                    <Label Name="FixtureIdLabel"  Grid.Row="15" Margin="0" Padding="0">ID:</Label>
-                                    <Label Name="FixtureIdValueLabel"  Grid.Row="15" Grid.Column="1" Margin="0" Padding="0" Grid.ColumnSpan="2" Content="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Id, FallbackValue='-1'}" />
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -252,6 +355,8 @@
                     <TabItem Name="DMXInputPrefTab" Header="_DMX">
                     </TabItem>
                 </TabControl>
+            </TabItem>
+            <TabItem Name="OutputPrefTab" Header="_Output">
             </TabItem>
             <TabItem Name="NetworkPrefTab" Header="_Network">
                 <TabControl>

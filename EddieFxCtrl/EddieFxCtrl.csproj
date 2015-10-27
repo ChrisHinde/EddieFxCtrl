@@ -140,6 +140,7 @@
     <Compile Include="Classes\efcFixtureMode.cs" />
     <Compile Include="Classes\efcFixtureModel.cs" />
     <Compile Include="Classes\efcFixtureType.cs" />
+    <Compile Include="Classes\efcModes.cs" />
     <Compile Include="efcMainWindow.xaml.cs">
       <DependentUpon>efcMainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -148,10 +149,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PromptDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="efcPreferencesWindow.xaml.cs">
       <DependentUpon>efcPreferencesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PromptDialog.xaml.cs">
+      <DependentUpon>PromptDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -222,6 +230,147 @@
     <Resource Include="Resources\Images\Icon_Remove.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ic_3d_rotation_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_account_balance_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_add_alert_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_alarm_add_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_alarm_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_alarm_off_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_alarm_on_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_announcement_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_aspect_ratio_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_assignment_late_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_assignment_returned_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_assignment_turned_in_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_autorenew_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_build_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_cached_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_change_history_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_check_circle_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_code_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_delete_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_description_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_dns_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_done_all_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_eject_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_error_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_error_outline_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_event_seat_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_exit_to_app_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_explore_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_favorite_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_favorite_border_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_feedback_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_flip_to_back_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_flip_to_front_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_get_app_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_grade_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_group_work_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_help_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_help_outline_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_highlight_off_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_history_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_home_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_hourglass_empty_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_hourglass_full_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_https_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_http_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_info_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_info_outline_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_invert_colors_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_label_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_label_outline_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_language_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_launch_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_list_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_lock_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_lock_open_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_lock_outline_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_note_add_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_offline_pin_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_open_in_browser_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_open_with_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_perm_data_setting_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_perm_device_information_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_perm_media_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_perm_scan_wifi_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_picture_in_picture_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_play_for_work_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_power_settings_new_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_query_builder_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_receipt_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_reorder_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_report_problem_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_restore_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_schedule_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_search_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_applications_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_backup_restore_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_brightness_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_cell_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_ethernet_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_input_antenna_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_input_component_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_input_hdmi_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_input_svideo_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_overscan_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_power_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_remote_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_settings_voice_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_stars_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_subject_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_swap_horiz_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_swap_vertical_circle_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_swap_vert_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_system_update_alt_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_tab_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_tab_unselected_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_theaters_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_thumbs_up_down_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_thumb_down_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_thumb_up_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_toc_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_today_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_toll_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_track_changes_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_trending_down_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_trending_flat_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_verified_user_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_view_agenda_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_view_column_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_view_headline_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_view_list_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_view_module_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_view_week_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_visibility_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_visibility_off_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_warning_black_96dp.png" />
+    <Resource Include="Resources\Images\ic_youtube_searched_for_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_zoom_in_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_zoom_out_black_48dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ic_arrow-up-bold.png" />
+    <Resource Include="Resources\Images\ic_plus-circle.png" />
+    <Resource Include="Resources\Images\ic_plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ic_arrow-down-bold.png" />
+    <Resource Include="Resources\Images\ic_minus.png" />
+    <Resource Include="Resources\Images\ic_minus_bold.png" />
+    <Resource Include="Resources\Images\ic_plus_bold.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ic_action_navigation_more_horiz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ic_play_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_play_grey600_48dp.png" />
+    <Resource Include="Resources\Images\ic_stop_black_48dp.png" />
+    <Resource Include="Resources\Images\ic_stop_grey600_48dp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

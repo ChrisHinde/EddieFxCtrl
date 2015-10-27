@@ -58,5 +58,41 @@ namespace EddieFxCtrl.Properties {
                 this["FixturesFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BlackoutDefault {
+            get {
+                return ((bool)(this["BlackoutDefault"]));
+            }
+            set {
+                this["BlackoutDefault"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public uint BlackoutMode {
+            get {
+                return ((uint)(this["BlackoutMode"]));
+            }
+            set {
+                this["BlackoutMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public uint MasterMode {
+            get {
+                return ((uint)(this["MasterMode"]));
+            }
+            set {
+                this["MasterMode"] = value;
+            }
+        }
     }
 }
