@@ -13,10 +13,13 @@ namespace EddieFxCtrl.Classes
         public string Name { get; set; }
         public byte ChannelCount { get; set; }
 
-        public ObservableCollection<efcFixtureChannel> Channels;
+        public ObservableCollection<efcFixtureChannel> Channels { get; set; }
 
-        public efcFixtureMode()
+        public efcFixtureMode( int id = -1, string name = "" )
         {
+            Id = id;
+            Name = name;
+
             Channels = new ObservableCollection<efcFixtureChannel>();
         }
 

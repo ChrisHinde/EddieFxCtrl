@@ -8,10 +8,17 @@ namespace EddieFxCtrl.Classes
 {
     public class efcFixtureChannel
     {
-        public byte FixtureChannel;
-        public string Name;
-        public string Description;
-        public efcChannelType Type;
+        public byte FixtureChannel { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public efcChannelType Type { get; set; }
+
+        public efcFixtureChannel( byte channel = 0, string name = "", efcChannelType type = efcChannelType.NoFunction )
+        {
+            FixtureChannel = channel;
+            Name = name;
+            Type = type;
+        }
 
         public override string ToString()
         {
