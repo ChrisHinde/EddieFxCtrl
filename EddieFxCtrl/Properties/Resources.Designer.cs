@@ -103,5 +103,14 @@ namespace EddieFxCtrl.Properties {
                 return ResourceManager.GetString("efcFixtures", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*.
+        /// </summary>
+        internal static string FileExtensions_Images {
+            get {
+                return ResourceManager.GetString("FileExtensions_Images", resourceCulture);
+            }
+        }
     }
 }

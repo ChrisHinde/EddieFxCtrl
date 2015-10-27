@@ -4,6 +4,23 @@
              xmlns:local="clr-namespace:EddieFxCtrl"
              StartupUri="efcMainWindow.xaml">
     <Application.Resources>
-         
+        <BitmapImage x:Key="Icon_Blackout_On" UriSource="Resources/Images/ic_error_outline_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Blackout" UriSource="Resources/Images/ic_error_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Add" UriSource="Resources/Images/ic_plus_bold.png" />
+        <BitmapImage x:Key="Icon_Remove" UriSource="Resources/Images/ic_delete_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Plus_B" UriSource="Resources/Images/ic_plus_bold.png" />
+        <BitmapImage x:Key="Icon_Minus_B" UriSource="Resources/Images/ic_minus_bold.png" />
+        <BitmapImage x:Key="Icon_Ellipsis" UriSource="Resources/Images/ic_action_navigation_more_horiz.png" />
+        <BitmapImage x:Key="Icon_Up" UriSource="Resources/Images/ic_arrow-up-bold.png" />
+        <BitmapImage x:Key="Icon_Up_1" UriSource="Resources/Images/Icon_Up_1.png" />
+        <BitmapImage x:Key="Icon_Up_2" UriSource="Resources/Images/Icon_Up_2.png" />
+        <BitmapImage x:Key="Icon_Down" UriSource="Resources/Images/ic_arrow-down-bold.png" />
+        <BitmapImage x:Key="Icon_Down_1" UriSource="Resources/Images/Icon_Down_1.png" />
+        <BitmapImage x:Key="Icon_Down_2" UriSource="Resources/Images/Icon_Down_2.png" />
+        <BitmapImage x:Key="Icon_QMark" UriSource="Resources/Images/ic_help_black_48dp.png" />
+        <BitmapImage x:Key="Icon_QMark_Outline" UriSource="Resources/Images/ic_help_outline_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Wrench" UriSource="Resources/Images/ic_build_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Play" UriSource="Resources/Images/ic_play_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Stop" UriSource="Resources/Images/ic_play_stop_48dp.png" />
     </Application.Resources>
 </Application>
