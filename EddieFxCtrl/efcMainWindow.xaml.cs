@@ -1,27 +1,42 @@
 ﻿using EddieFxCtrl.Classes;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Linq;
-using Xceed.Wpf.Toolkit;
 
 namespace EddieFxCtrl
 {
     /// <summary>
     /// Interaction logic for efcMainWindow.xaml
     /// </summary>
-    public partial class efcMainWindow : Window
+    public partial class efcMainWindow : Window, INotifyPropertyChanged
     {
         public const int FIXTURES = 0, EFFECTS = 1, SCENES = 2, INFO = 3, OUTPUT = 4;
         public ObservableCollection<efcCompany> Companies;
         public int MaxCompanyID = 0;
         public ObservableCollection<efcFixtureModel> FixtureModels;
         public int MaxFixtureID = 0;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private bool _blackoutActive;
+        public bool BlackoutActive
+        {
+            get { return _blackoutActive; }
+            set
+            {
+                if (value != _blackoutActive)
+                {
+                    _blackoutActive = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public efcMainWindow()
         {
@@ -33,6 +48,9 @@ namespace EddieFxCtrl
 
             MainTabCtrl.SelectedIndex = INFO;
             InfoTabControl.SelectedIndex = 1;
+
+            BlackoutActive = Properties.Settings.Default.BlackoutDefault;
+            log("Blackout Default:" + BlackoutActive.ToString());
         }
 
         public void log(string info)
@@ -138,6 +156,7 @@ namespace EddieFxCtrl
                 byte totalChannelCount = 0;
 
                 var modes = el.Element("{http://diversum.se/apps/efc.xsd}modes").Elements("{http://diversum.se/apps/efc.xsd}mode");
+                int maxModeId = -1;
 
                 foreach (XElement m in modes)
                 {
@@ -167,10 +186,15 @@ namespace EddieFxCtrl
                     if (channelCount > totalChannelCount)
                         totalChannelCount = channelCount;
 
-                    log("Mode added: " + mode.ToString());
+                    if (mode.Id > maxModeId)
+                        maxModeId = mode.Id;
 
                     fix.Modes.Add(mode);
+
+                    log("Mode added: " + mode.ToString());
                 }
+
+                fix.MaxModeId = maxModeId;
 
                 fix.TotalChannelCount = totalChannelCount;
 
@@ -205,6 +229,16 @@ namespace EddieFxCtrl
             prefDlg.ShowDialog();
         }
 
+        private void BlackoutCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            BlackoutActive = !BlackoutActive;
+        }
+
+        private void BlackoutOutputTB_Click(object sender, RoutedEventArgs e)
+        {
+            BlackoutActive = !BlackoutActive;
+        }
+
         private void ScreenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string name = (e.Command as RoutedUICommand).Name;
@@ -227,6 +261,14 @@ namespace EddieFxCtrl
         {
             if (Xceed.Wpf.Toolkit.MessageBox.Show("Do you really want to close Eddie Fx Controller?", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
                 e.Cancel = true;
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 

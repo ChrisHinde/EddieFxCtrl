@@ -16,6 +16,7 @@
         <CommandBinding Command="local:efcUICommands.ScreenScenes" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:efcUICommands.ScreenInfo" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:efcUICommands.ScreenOutput" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:efcUICommands.Blackout" CanExecute="GeneralCommand_CanExecute" Executed="BlackoutCommand_Executed" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu x:Name="menu" Height="21" DockPanel.Dock="Top">
@@ -42,10 +43,61 @@
             <MenuItem Header="_Help">
             </MenuItem>
         </Menu>
-        <ToolBarTray Height="30" DockPanel.Dock="Top">
-            <ToolBar x:Name="outputToolBar" >
-                <Button x:Name="BlackoutOutputTB" VerticalAlignment="Stretch" HorizontalAlignment="Left">
-                    <TextBlock>Blackout</TextBlock>
+        <ToolBarTray Height="42" DockPanel.Dock="Top">
+            <ToolBar x:Name="outputToolBar" Margin="0">
+                <Button x:Name="ModeToolBarButton" Height="36">
+                    <StackPanel Orientation="Horizontal" Margin="0">
+                        <Image Height="Auto" Margin="0,0,5,0">
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Setter Property="Source" Value="{StaticResource Icon_Play}" />
+                                    <Style.Triggers>
+                                        <DataTrigger  Binding="{Binding BlackoutActive, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                                         AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Source" Value="{StaticResource Icon_Stop}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <TextBlock Margin="0,7,5,0">Run Mode</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BlackoutOutputTB" VerticalAlignment="Stretch" HorizontalAlignment="Left" Height="36" Click="BlackoutOutputTB_Click">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding BlackoutActive, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                                         AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="ToolTip" Value="Blackout is ACTIVE! Click to turn off! (Ctrl+Shift+B)" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding BlackoutActive, RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                    <Setter Property="ToolTip" Value="Blackout is NOT active! Click to turn on! (Ctrl+Shift+B)" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <StackPanel Orientation="Horizontal" Margin="0">
+                        <Image Height="Auto" Margin="0,0,5,0">
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Setter Property="Source" Value="{StaticResource Icon_Blackout}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding BlackoutActive, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                                         AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Source" Value="{StaticResource Icon_Blackout_On}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding BlackoutActive, RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Source" Value="{StaticResource Icon_Blackout}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <TextBlock Margin="0,7,5,0">Blackout</TextBlock>
+                    </StackPanel>
                 </Button>
             </ToolBar>
         </ToolBarTray>
