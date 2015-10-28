@@ -96,6 +96,9 @@ namespace EddieFxCtrl
             //_MainWin.SaveXMLFiles();
 
             Properties.Settings.Default.EddieKBD_COM = ComEKBDInputPrefCmbBox.Text;
+            Properties.Settings.Default.MasterMode = (uint)MasterModeCombo.SelectedIndex;
+            Properties.Settings.Default.BlackoutMode = (uint)BlackoutMode.SelectedIndex;
+            Properties.Settings.Default.BlackoutDefault = BlackoutDefault.IsChecked.Value;
             Properties.Settings.Default.Save();
         }
 
@@ -200,7 +203,7 @@ namespace EddieFxCtrl
             (
                 "_Ok",
                 "Ok",
-                typeof(efcUICommands),
+                typeof(efcPrefUICommands),
                 new InputGestureCollection()
                 {
                 }

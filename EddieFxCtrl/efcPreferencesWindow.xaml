@@ -6,11 +6,12 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:EddieFxCtrl"
         xmlns:local_classes="clr-namespace:EddieFxCtrl.Classes"
+        xmlns:properties="clr-namespace:EddieFxCtrl.Properties"
         mc:Ignorable="d"
         Title="EFC - Preferences" Height="530" Width="510"
         WindowStartupLocation="CenterScreen" Icon="{DynamicResource Icon_Wrench}">
     <Window.CommandBindings>
-        <!--ommandBinding Command="local:efcPrefUICommands.Ok" CanExecute="OkCommand_CanExecute" Executed="OkCommand_Executed" /-->
+        <CommandBinding Command="local:efcPrefUICommands.Ok" CanExecute="OkCommand_CanExecute" Executed="OkCommand_Executed" />
     </Window.CommandBindings>
     <Window.Resources>
         <local:IsLastModeChannelConverter x:Key="IsLastModeChannelConverter" />
@@ -66,7 +67,7 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Button Name="SavePrefBtn" Grid.Column="0" IsDefault="True" Margin="3">_Save</Button>
+            <Button Name="SavePrefBtn" Grid.Column="0" IsDefault="True" Margin="3" Command="local:efcPrefUICommands.Ok">_Save</Button>
             <Button Name="CancelPrefBtn" Grid.Column="1" IsCancel="True" Margin="3">_Cancel</Button>
         </Grid>
         <TabControl>
@@ -80,14 +81,14 @@
                         <GroupBox Header="Master" Grid.Column="0">
                             <StackPanel Orientation="Vertical" Margin="3">
                                 <Label>Mode:</Label>
-                                <ComboBox Name="MasterModeCombo" ItemsSource="{Binding Source={StaticResource MasterModes}}" />
+                                <ComboBox Name="MasterModeCombo" ItemsSource="{Binding Source={StaticResource MasterModes}}" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=MasterMode, Mode=OneTime}" />
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="Blackout" Grid.Column="1">
                             <StackPanel Orientation="Vertical" Margin="3">
                                 <Label>Mode:</Label>
-                                <ComboBox SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Source={StaticResource BlackoutModes}}"></ComboBox>
-                                <CheckBox Name="BlackoutDefault" Margin="0,6">Start with Blackout active</CheckBox>
+                                <ComboBox Name="BlackoutMode" ItemsSource="{Binding Source={StaticResource BlackoutModes}}" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=BlackoutMode, Mode=OneTime}"></ComboBox>
+                                <CheckBox Name="BlackoutDefault" Margin="0,6" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=BlackoutDefault, Mode=OneTime}">Start with Blackout active</CheckBox>
                             </StackPanel>
                         </GroupBox>
                     </Grid>
