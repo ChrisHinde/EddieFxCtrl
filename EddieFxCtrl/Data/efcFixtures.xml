@@ -25,7 +25,7 @@
       <efc:mode id="0">
         <efc:name>Dimmer</efc:name>
         <efc:channels>
-          <efc:channel channel="1" type="10">
+          <efc:channel channel="1" type="11">
             <efc:name>Dimmer</efc:name>
             <efc:description></efc:description>
           </efc:channel>
