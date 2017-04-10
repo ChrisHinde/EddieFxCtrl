@@ -272,13 +272,13 @@ namespace EddieFxCtrl
         }
     }
 
-    public static class efcUICommands
+    public static class EfcUICommands
     {
         public static readonly RoutedUICommand Quit = new RoutedUICommand
             (
                 "_Quit",
                 "Quit",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.Q,ModifierKeys.Control)
@@ -288,7 +288,7 @@ namespace EddieFxCtrl
             (
                 "_Preferences",
                 "Preferences",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.P,ModifierKeys.Control | ModifierKeys.Shift)
@@ -298,7 +298,7 @@ namespace EddieFxCtrl
             (
                 "_Blackout",
                 "Blackout",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.B,ModifierKeys.Control | ModifierKeys.Shift)
@@ -308,7 +308,7 @@ namespace EddieFxCtrl
             (
                 "_Fixtures",
                 "ScreenFixtures_0",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.D1,ModifierKeys.Control | ModifierKeys.Shift)
@@ -318,7 +318,7 @@ namespace EddieFxCtrl
             (
                 "_Effects",
                 "ScreenEffects_1",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.D2,ModifierKeys.Control | ModifierKeys.Shift)
@@ -328,7 +328,7 @@ namespace EddieFxCtrl
             (
                 "_Scenes",
                 "ScreenScenes_2",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.D3,ModifierKeys.Control | ModifierKeys.Shift)
@@ -338,7 +338,7 @@ namespace EddieFxCtrl
             (
                 "_Info",
                 "ScreenInfo_3",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.D4,ModifierKeys.Control | ModifierKeys.Shift)
@@ -348,7 +348,7 @@ namespace EddieFxCtrl
             (
                 "_Output",
                 "ScreenOutput_4",
-                typeof(efcUICommands),
+                typeof(EfcUICommands),
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.D9,ModifierKeys.Control | ModifierKeys.Shift),

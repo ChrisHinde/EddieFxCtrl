@@ -9,36 +9,36 @@
         mc:Ignorable="d"
         Title="Eddie Fx Controller" Height="720" Width="900" WindowState="Maximized" Closing="Window_Closing">
     <Window.CommandBindings>
-        <CommandBinding Command="local:efcUICommands.Quit" CanExecute="GeneralCommand_CanExecute" Executed="QuitCommand_Executed" />
-        <CommandBinding Command="local:efcUICommands.Preferences" CanExecute="GeneralCommand_CanExecute" Executed="PreferencesCommand_Executed" />
-        <CommandBinding Command="local:efcUICommands.ScreenFixtures" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
-        <CommandBinding Command="local:efcUICommands.ScreenEffects" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
-        <CommandBinding Command="local:efcUICommands.ScreenScenes" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
-        <CommandBinding Command="local:efcUICommands.ScreenInfo" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
-        <CommandBinding Command="local:efcUICommands.ScreenOutput" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
-        <CommandBinding Command="local:efcUICommands.Blackout" CanExecute="GeneralCommand_CanExecute" Executed="BlackoutCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.Quit" CanExecute="GeneralCommand_CanExecute" Executed="QuitCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.Preferences" CanExecute="GeneralCommand_CanExecute" Executed="PreferencesCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.ScreenFixtures" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.ScreenEffects" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.ScreenScenes" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.ScreenInfo" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.ScreenOutput" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.Blackout" CanExecute="GeneralCommand_CanExecute" Executed="BlackoutCommand_Executed" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu x:Name="menu" Height="21" DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <Separator/>
-                <MenuItem Command="local:efcUICommands.Quit" />
+                <MenuItem Command="local:EfcUICommands.Quit" />
             </MenuItem>
             <MenuItem Header="_Edit">
                 <Separator/>
-                <MenuItem Command="local:efcUICommands.Preferences" />
+                <MenuItem Command="local:EfcUICommands.Preferences" />
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Screens">
-                    <MenuItem Command="local:efcUICommands.ScreenFixtures" />
-                    <MenuItem Command="local:efcUICommands.ScreenEffects" />
-                    <MenuItem Command="local:efcUICommands.ScreenScenes" />
-                    <MenuItem Command="local:efcUICommands.ScreenInfo" />
-                    <MenuItem Command="local:efcUICommands.ScreenOutput" />
+                    <MenuItem Command="local:EfcUICommands.ScreenFixtures" />
+                    <MenuItem Command="local:EfcUICommands.ScreenEffects" />
+                    <MenuItem Command="local:EfcUICommands.ScreenScenes" />
+                    <MenuItem Command="local:EfcUICommands.ScreenInfo" />
+                    <MenuItem Command="local:EfcUICommands.ScreenOutput" />
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Commands">
-                <MenuItem Command="local:efcUICommands.Blackout" />
+                <MenuItem Command="local:EfcUICommands.Blackout" />
             </MenuItem>
             <MenuItem Header="_Help">
             </MenuItem>
