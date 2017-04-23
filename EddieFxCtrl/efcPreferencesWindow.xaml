@@ -15,12 +15,6 @@
     </Window.CommandBindings>
     <Window.Resources>
         <local:IsLastModeChannelConverter x:Key="IsLastModeChannelConverter" />
-        <ObjectDataProvider x:Key="ChannelTypes" MethodName="GetValues"
-                            ObjectType="{x:Type System:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local_classes:EfcChannelType"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
         <ObjectDataProvider x:Key="MasterModes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>

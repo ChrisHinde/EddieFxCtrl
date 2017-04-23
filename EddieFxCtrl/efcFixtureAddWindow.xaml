@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EddieFxCtrl"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Add Fixture" Height="517" Width="360">
+        Title="Add Fixture" Height="587" Width="360">
     <Window.CommandBindings>
         <CommandBinding Command="local:efcFixtureAddUICommands.Ok" CanExecute="OkCommand_CanExecute" Executed="OkCommand_Executed" />
     </Window.CommandBindings>
@@ -38,10 +38,10 @@
                 <RowDefinition Height="24" />
                 <RowDefinition Height="24" />
                 <RowDefinition Height="24" />
-                <RowDefinition Height="42" />
                 <RowDefinition Height="24" />
                 <RowDefinition Height="24" />
-                <RowDefinition Height="5" />
+                <RowDefinition Height="24" />
+                <RowDefinition Height="100" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Content="Name:" />
@@ -50,6 +50,13 @@
             <TextBox Grid.Row="3" Name="fixtureNoteTextBox" Text="" TextWrapping="WrapWithOverflow" Margin="3,0" />
             <Label Grid.Row="4" Content="Mode:" />
             <ComboBox Grid.Row="5" Name="FixtureModeComboBox" Margin="3,0" SelectionChanged="OptionSelectionChanged" />
+            <DataGrid Name="FixtureModeChannelsDataGrid" Grid.Row="6" Margin="3" ItemsSource="{Binding ElementName=FixtureModeComboBox, Path=SelectedItem.Channels, Mode=TwoWay}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="#" Binding="{Binding FixtureChannel}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="1*" IsReadOnly="True" />
+                    <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={StaticResource ChannelTypes}}" Width="1*" IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
             <!--Separator Grid.Row="6" /-->
             <GroupBox Grid.Row="7" Header="Adressing">
                 <Grid>

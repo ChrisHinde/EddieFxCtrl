@@ -5,7 +5,7 @@
 -* Delete fixture models
 -* Save companies to file
 -* Save fixture models to file
-* Show modes when adding fixture to show
+-* Show modes when adding fixture to show
 * Check "edit" of show fixture list
 * Save show to file
 * Open show from file
