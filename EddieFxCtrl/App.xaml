@@ -21,6 +21,23 @@
         <BitmapImage x:Key="Icon_QMark_Outline" UriSource="Resources/Images/ic_help_outline_black_48dp.png" />
         <BitmapImage x:Key="Icon_Wrench" UriSource="Resources/Images/ic_build_black_48dp.png" />
         <BitmapImage x:Key="Icon_Play" UriSource="Resources/Images/ic_play_black_48dp.png" />
-        <BitmapImage x:Key="Icon_Stop" UriSource="Resources/Images/ic_play_stop_48dp.png" />
+        <BitmapImage x:Key="Icon_Stop" UriSource="Resources/Images/ic_stop_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Pause" UriSource="Resources/Images/ic_pause_black_48dp.png" />
+        <BitmapImage x:Key="Icon_List" UriSource="Resources/Images/ic_list_black_48dp.png" />
+        <BitmapImage x:Key="Icon_View_List" UriSource="Resources/Images/ic_view_list_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Grid_List" UriSource="Resources/Images/ic_view_module_black_48dp.png" />
+
+
+        <DataTemplate x:Key="CompanyItemTemplate">
+            <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+        <HierarchicalDataTemplate x:Key="FixtureItemTemplate" ItemsSource="{Binding Fixtures}">
+            <TextBlock Text="{Binding Name}" />
+            <HierarchicalDataTemplate.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </HierarchicalDataTemplate.ItemTemplate>
+        </HierarchicalDataTemplate>
     </Application.Resources>
 </Application>

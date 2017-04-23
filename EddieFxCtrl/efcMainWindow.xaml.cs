@@ -14,13 +14,16 @@ namespace EddieFxCtrl
     /// <summary>
     /// Interaction logic for efcMainWindow.xaml
     /// </summary>
-    public partial class efcMainWindow : Window, INotifyPropertyChanged
+    public partial class EfcMainWindow : Window, INotifyPropertyChanged
     {
         public const int FIXTURES = 0, EFFECTS = 1, SCENES = 2, INFO = 3, OUTPUT = 4;
-        public ObservableCollection<efcCompany> Companies;
+        public ObservableCollection<EfcCompany> Companies;
         public int MaxCompanyID = 0;
-        public ObservableCollection<efcFixtureModel> FixtureModels;
+
+        public ObservableCollection<EfcFixtureModel> FixtureModels;
         public int MaxFixtureID = 0;
+
+        public EfcShow CurrentShow;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -33,36 +36,58 @@ namespace EddieFxCtrl
                 if (value != _blackoutActive)
                 {
                     _blackoutActive = value;
+                    Log("Blackout:" + _blackoutActive.ToString());
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        private bool _isRunning;
+        public bool IsRunning
+        {
+            get { return _isRunning; }
+            set
+            {
+                if (value != _isRunning)
+                {
+                    _isRunning = value;
+                    Log("RunMode:" + _isRunning.ToString());
                     NotifyPropertyChanged();
                 }
             }
         }
 
-        public efcMainWindow()
+        public EfcMainWindow()
         {
             InitializeComponent();
 
-            log("EFC Started!");
+            CurrentShow = new EfcShow(this);
 
+            FixturesCtrl.SetMainWin(this);
+
+            Log("EFC Started!");
+            
             LoadData();
 
-            MainTabCtrl.SelectedIndex = INFO;
-            InfoTabControl.SelectedIndex = 1;
+            //MainTabCtrl.SelectedIndex = INFO;
+            //InfoTabControl.SelectedIndex = 1;
 
+            IsRunning = false;
             BlackoutActive = Properties.Settings.Default.BlackoutDefault;
-            log("Blackout Default:" + BlackoutActive.ToString());
+            Log("Blackout Default:" + BlackoutActive.ToString());
         }
 
-        public void log(string info)
+        public void Log(string info)
         {
             logTextBox.Text += "[" + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + "]: " + info + Environment.NewLine;
         }
 
         private void LoadData()
         {
+            XNamespace ns = "http://diversum.se/apps/efc.xsd";
+            
             if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EFC")))
             {
-                log("Creating EFC directory in AppData!");
+                Log("Creating EFC directory in AppData!");
                 Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EFC"));
             }
 
@@ -71,7 +96,7 @@ namespace EddieFxCtrl
             {
                 string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EFC", "efcCompanies.xml");
 
-                log("No Companies file found! Creating it from default data!");
+                Log("No Companies file found! Creating it from default data!");
 
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
                 {
@@ -82,32 +107,33 @@ namespace EddieFxCtrl
                     file.Write(Properties.Resources.efcCompanies);
                 }
 
-                log("Company data stored in: " + fileName);
+                Log("Company data stored in: " + fileName);
 
                 Properties.Settings.Default.CompaniesFile = fileName;
 
                 Properties.Settings.Default.Save();
             }
 
-            Companies = new ObservableCollection<efcCompany>();
+            Companies = new ObservableCollection<EfcCompany>();
 
-            log("Loading company data from: " + Properties.Settings.Default.CompaniesFile);
+            Log("Loading company data from: " + Properties.Settings.Default.CompaniesFile);
 
             XDocument cDoc = XDocument.Load(Properties.Settings.Default.CompaniesFile);
-            MaxCompanyID = Convert.ToInt32(cDoc.Element("{http://diversum.se/apps/efc.xsd}data").Attribute("max_id").Value);
+            MaxCompanyID = Convert.ToInt32(cDoc.Element(ns + "data").Attribute("max_id").Value);
 
-            var cList = cDoc.Root.Elements("{http://diversum.se/apps/efc.xsd}company");
+            var cList = cDoc.Root.Elements(ns + "company");
             foreach (XElement el in cList)
             {
-                efcCompany comp = new efcCompany();
-                comp.Id = Convert.ToInt32(el.Attribute("id").Value);
-                comp.Name = el.Element("{http://diversum.se/apps/efc.xsd}name").Value;
-                comp.Url = el.Element("{http://diversum.se/apps/efc.xsd}url").Value;
-                comp.Logo = el.Element("{http://diversum.se/apps/efc.xsd}logo").Value;
-
+                EfcCompany comp = new EfcCompany()
+                {
+                    Id = Convert.ToInt32(el.Attribute("id").Value),
+                    Name = el.Element(ns + "name").Value,
+                    Url = el.Element(ns + "url").Value,
+                    Logo = el.Element(ns + "logo").Value
+                };
                 Companies.Add(comp);
 
-                log("Company added: " + comp.ToString());
+                Log("Company added: " + comp.ToString());
             }
 
             /** Fixtures **/
@@ -115,7 +141,7 @@ namespace EddieFxCtrl
             {
                 string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EFC", "efcFixtures.xml");
 
-                log("No Fixtures file found! Creating it from default data!");
+                Log("No Fixtures file found! Creating it from default data!");
 
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
                 {
@@ -126,57 +152,62 @@ namespace EddieFxCtrl
                     file.Write(Properties.Resources.efcFixtures);
                 }
 
-                log("Fixture data stored in: " + fileName);
+                Log("Fixture data stored in: " + fileName);
 
                 Properties.Settings.Default.FixturesFile = fileName;
 
                 Properties.Settings.Default.Save();
             }
 
-            FixtureModels = new ObservableCollection<efcFixtureModel>();
+            FixtureModels = new ObservableCollection<EfcFixtureModel>();
 
-            log("Loading fixture data from: " + Properties.Settings.Default.FixturesFile);
+            Log("Loading fixture data from: " + Properties.Settings.Default.FixturesFile);
 
             XDocument fDoc = XDocument.Load(Properties.Settings.Default.FixturesFile);
-            MaxFixtureID = Convert.ToInt32(cDoc.Element("{http://diversum.se/apps/efc.xsd}data").Attribute("max_id").Value);
+            MaxFixtureID = Convert.ToInt32(fDoc.Element(ns + "data").Attribute("max_id").Value);
+            
+            Log("MaxFixID::" + MaxFixtureID.ToString());
 
-            var fList = fDoc.Root.Elements("{http://diversum.se/apps/efc.xsd}fixture");
+            //MaxFixtureID = 0;
+            var fList = fDoc.Root.Elements(ns + "fixture");
             foreach (XElement el in fList)
             {
-                efcFixtureModel fix = new efcFixtureModel();
-                fix.Id = Convert.ToInt32(el.Attribute("id").Value);
-                fix.Type = (efcFixtureType)Convert.ToInt32(el.Attribute("type").Value);
-                fix.Manufacturer = Convert.ToInt32(el.Attribute("company_id").Value);
-                fix.Name = el.Element("{http://diversum.se/apps/efc.xsd}name").Value;
-                fix.Description = el.Element("{http://diversum.se/apps/efc.xsd}description").Value;
-                fix.Image = el.Element("{http://diversum.se/apps/efc.xsd}image").Value;
-
-                efcFixtureChannel channel;
+                EfcFixtureModel fix = new EfcFixtureModel()
+                {
+                    Id = Convert.ToInt32(el.Attribute("id").Value),
+                    Type = (EfcFixtureType)Convert.ToInt32(el.Attribute("type").Value),
+                    Manufacturer = Convert.ToInt32(el.Attribute("company_id").Value),
+                    Name = el.Element(ns + "name").Value,
+                    Description = el.Element(ns + "description").Value,
+                    Image = el.Element(ns + "image").Value
+                };
+                EfcFixtureChannel channel;
                 efcFixtureMode mode;
                 byte totalChannelCount = 0;
 
-                var modes = el.Element("{http://diversum.se/apps/efc.xsd}modes").Elements("{http://diversum.se/apps/efc.xsd}mode");
+                var modes = el.Element(ns + "modes").Elements(ns + "mode");
                 int maxModeId = -1;
 
                 foreach (XElement m in modes)
                 {
-                    mode = new efcFixtureMode();
+                    mode = new efcFixtureMode()
+                    {
+                        Id = Convert.ToInt32(m.Attribute("id").Value),
+                        Name = m.Element(ns + "name").Value
+                    };
 
-                    mode.Id = Convert.ToInt32(m.Attribute("id").Value);
-                    mode.Name = m.Element("{http://diversum.se/apps/efc.xsd}name").Value;
-
-                    var channels = m.Element("{http://diversum.se/apps/efc.xsd}channels").Elements("{http://diversum.se/apps/efc.xsd}channel");
+                    var channels = m.Element(ns + "channels").Elements(ns + "channel");
                     byte channelCount = 0;
 
                     foreach (XElement c in channels)
                     {
-                        channel = new efcFixtureChannel();
-
-                        channel.FixtureChannel = Convert.ToByte(c.Attribute("channel").Value);
-                        channel.Type = (efcChannelType)Convert.ToInt32(c.Attribute("type").Value);
-                        channel.Name = c.Element("{http://diversum.se/apps/efc.xsd}name").Value;
-                        channel.Description = c.Element("{http://diversum.se/apps/efc.xsd}description").Value;
-
+                        channel = new EfcFixtureChannel()
+                        {
+                            FixtureChannel = Convert.ToByte(c.Attribute("channel").Value),
+                            Type = (EfcChannelType)Convert.ToInt32(c.Attribute("type").Value),
+                            Name = c.Element(ns + "name").Value,
+                            Description = c.Element(ns + "description").Value
+                        };
                         mode.Channels.Add(channel);
                         channelCount++;
                     }
@@ -191,24 +222,133 @@ namespace EddieFxCtrl
 
                     fix.Modes.Add(mode);
 
-                    log("Mode added: " + mode.ToString());
+                    Log("Mode added: " + mode.ToString());
                 }
 
                 fix.MaxModeId = maxModeId;
 
                 fix.TotalChannelCount = totalChannelCount;
 
-                efcCompany comp = Companies.Where(X => X.Id == fix.Manufacturer).FirstOrDefault();
+                EfcCompany comp = Companies.Where(X => X.Id == fix.Manufacturer).FirstOrDefault();
 
                 if (comp != null)
+                {
                     comp.Fixtures.Add(fix);
+                    fix.Company = comp;
+                }
                 else
-                    log("Can't add Fixture to Company: " + fix.Manufacturer.ToString());
+                    Log("Can't add Fixture to Company: " + fix.Manufacturer.ToString());
 
                 FixtureModels.Add(fix);
 
-                log("Fixture added: " + fix.ToString());
+                /*if (fix.Id > MaxFixtureID)
+                    MaxFixtureID = fix.Id;*/
+
+                Log("Fixture added: " + fix.ToString());
             }
+        }
+
+        internal void SaveCompanyData()
+        {
+            XNamespace ns = "http://diversum.se/apps/efc.xsd";
+            XDocument cDoc = new XDocument();
+
+            XElement cRootElm = new XElement(ns + "data");
+            cRootElm.SetAttributeValue(XNamespace.Xmlns + "efc", "http://diversum.se/apps/efc.xsd");
+
+            cRootElm.SetAttributeValue("type", "companies");
+            cRootElm.SetAttributeValue("max_id", MaxCompanyID);
+
+            XElement cElm;
+
+            foreach (EfcCompany company in Companies)
+            {
+                cElm = new XElement(ns + "company");
+                cElm.SetAttributeValue("id", company.Id);
+
+                cElm.Add(new XElement(ns + "name", company.Name));
+                cElm.Add(new XElement(ns + "url", company.Url));
+                cElm.Add(new XElement(ns + "logo", company.Logo));
+
+                cRootElm.Add(cElm);
+            }
+
+            cElm = null;
+
+            cDoc.Add(cRootElm);
+            cDoc.Save(Properties.Settings.Default.CompaniesFile);
+
+            Log("Company info saved to: " + Properties.Settings.Default.CompaniesFile);
+        }
+        internal void SaveFixtureData()
+        {
+            XNamespace ns = "http://diversum.se/apps/efc.xsd";
+            XDocument fDoc = new XDocument( );
+
+            XElement fRootElm = new XElement(ns + "data");
+            fRootElm.SetAttributeValue(XNamespace.Xmlns + "efc", "http://diversum.se/apps/efc.xsd");
+            
+            fRootElm.SetAttributeValue("type", "fixtures");
+            fRootElm.SetAttributeValue("max_id", MaxFixtureID);
+
+            XElement fElm;
+            XElement fModes;
+            XElement fMode;
+            XElement fModeChannel;
+            XElement fModeChannels;
+
+            foreach (EfcFixtureModel fixture in FixtureModels)
+            {
+                fElm = new XElement(ns + "fixture");
+                fElm.SetAttributeValue("id", fixture.Id);
+                fElm.SetAttributeValue("company_id", fixture.Manufacturer);
+                fElm.SetAttributeValue("type", (int)fixture.Type);
+
+                fElm.Add(new XElement(ns + "name", fixture.Name));
+                fElm.Add(new XElement(ns + "description", fixture.Description));
+                fElm.Add(new XElement(ns + "image", fixture.Image));
+
+                fModes = new XElement(ns + "modes");
+
+                foreach (efcFixtureMode mode in fixture.Modes)
+                {
+                    fMode = new XElement(ns + "mode");
+
+                    fMode.SetAttributeValue("id", mode.Id);
+                    fMode.Add(new XElement(ns + "name", mode.Name));
+
+                    fModeChannels = new XElement(ns + "channels");
+
+                    foreach (EfcFixtureChannel channel in mode.Channels)
+                    {
+                        fModeChannel = new XElement(ns + "channel");
+
+                        fModeChannel.SetAttributeValue("channel", channel.FixtureChannel);
+                        fModeChannel.SetAttributeValue("type", (int)channel.Type);
+
+                        fModeChannel.Add(new XElement(ns + "name", channel.Name));
+                        fModeChannel.Add(new XElement(ns + "description", channel.Description));
+
+                        fModeChannels.Add(fModeChannel);
+                    }
+
+                    fMode.Add(fModeChannels);
+
+                    fModes.Add(fMode);
+                }
+
+                fElm.Add(fModes);
+
+                fRootElm.Add(fElm);
+            }
+            
+
+            fDoc.Add(fRootElm);
+                
+             fDoc.Save(Properties.Settings.Default.FixturesFile);
+            //Log(fDoc.ToString());
+
+            Log("Fixture info saved to: " + Properties.Settings.Default.FixturesFile);
         }
 
         private void GeneralCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -218,15 +358,22 @@ namespace EddieFxCtrl
 
         private void QuitCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            /*if (Xceed.Wpf.Toolkit.MessageBox.Show("Do you really want to close the application?", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                Application.Current.Shutdown();*/
             Close();
         }
 
         private void PreferencesCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            efcPreferencesWindow prefDlg = new efcPreferencesWindow( this );
+            EfcPreferencesWindow prefDlg = new EfcPreferencesWindow( this );
             prefDlg.ShowDialog();
+        }
+
+        private void ModeToolBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsRunning = !IsRunning;
+        }
+        private void RunModeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            IsRunning = !IsRunning;
         }
 
         private void BlackoutCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -247,6 +394,21 @@ namespace EddieFxCtrl
             MainTabCtrl.SelectedIndex = tab;
         }
 
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        public void AddFixture_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = ! IsRunning; // TODO: Change to check more
+        }
+
+        private void AddFixture_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FixturesCtrl?.AddFixture_Executed(sender, e);
+        }
+
         private void ClearLogBtn_Click(object sender, RoutedEventArgs e)
         {
             logTextBox.Text = "";
@@ -265,10 +427,7 @@ namespace EddieFxCtrl
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -294,6 +453,16 @@ namespace EddieFxCtrl
                     new KeyGesture(Key.P,ModifierKeys.Control | ModifierKeys.Shift)
                 }
             );
+        public static readonly RoutedUICommand RunMode = new RoutedUICommand
+            (
+                "_Run",
+                "Run mode",
+                typeof(EfcUICommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.F9)
+                }
+            );
         public static readonly RoutedUICommand Blackout = new RoutedUICommand
             (
                 "_Blackout",
@@ -304,6 +473,18 @@ namespace EddieFxCtrl
                     new KeyGesture(Key.B,ModifierKeys.Control | ModifierKeys.Shift)
                 }
             );
+        /*
+        public static readonly RoutedUICommand AddFixture = new RoutedUICommand
+            (
+                "_Add Fixture",
+                "Add Fixture",
+                typeof(EfcUICommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.N,ModifierKeys.Control | ModifierKeys.Shift)
+                }
+            );*/
+
         public static readonly RoutedUICommand ScreenFixtures = new RoutedUICommand
             (
                 "_Fixtures",

@@ -39,13 +39,16 @@ namespace EddieFxCtrl
     /// <summary>
     /// Interaction logic for efcPreferencesWindow.xaml
     /// </summary>
-    public partial class efcPreferencesWindow : Window
+    public partial class EfcPreferencesWindow : Window
     {
-        protected efcMainWindow _MainWin;
-        protected efcCompany _CurrentCompany;
+        protected EfcMainWindow _MainWin;
+        protected EfcCompany _CurrentCompany;
         protected int _LastSelectedIndex = -1;
 
-        public efcPreferencesWindow( efcMainWindow mainWin )
+        protected bool _FixturesChanged = false;
+        protected bool _CompaniesChanged = false;
+
+        public EfcPreferencesWindow( EfcMainWindow mainWin )
         {
             InitializeComponent();
 
@@ -93,7 +96,13 @@ namespace EddieFxCtrl
 
         private void SavePreferences()
         {
-            //_MainWin.SaveXMLFiles();
+            _MainWin.Log("CompCh:" + _CompaniesChanged);
+            _MainWin.Log("FixCh:" + _FixturesChanged);
+
+            if (_CompaniesChanged)
+                _MainWin.SaveCompanyData();
+            if (_FixturesChanged)
+                _MainWin.SaveFixtureData();
 
             Properties.Settings.Default.EddieKBD_COM = ComEKBDInputPrefCmbBox.Text;
             Properties.Settings.Default.MasterMode = (uint)MasterModeCombo.SelectedIndex;
@@ -121,13 +130,18 @@ namespace EddieFxCtrl
 
         private void FixtureImageButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog of_dlg = new OpenFileDialog();
-            of_dlg.Filter = Properties.Resources.FileExtensions_Images;// "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
-            
-            of_dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            OpenFileDialog of_dlg = new OpenFileDialog()
+            {
+                Filter = Properties.Resources.FileExtensions_Images,// "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
+
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
 
             if (of_dlg.ShowDialog() == true)
+            {
                 FixtureImageTextBox.Text = of_dlg.FileName;
+                _FixturesChanged = true;
+            }
 
             FixtureImageTextBox.Focus();
         }
@@ -138,27 +152,35 @@ namespace EddieFxCtrl
 
             if (prompt.ShowDialog() == true)
             {
-                int new_id = ++(FixturesTreeView.SelectedItem as efcFixtureModel).MaxModeId;
-                (FixturesTreeView.SelectedItem as efcFixtureModel).Modes.Add(new efcFixtureMode(new_id, prompt.Answer));
+                int new_id = ++(FixturesTreeView.SelectedItem as EfcFixtureModel).MaxModeId;
+                (FixturesTreeView.SelectedItem as EfcFixtureModel).Modes.Add(new efcFixtureMode(new_id, prompt.Answer));
 
-                FixtureModesComboBox.SelectedIndex = (FixturesTreeView.SelectedItem as efcFixtureModel).Modes.Count - 1;
+                FixtureModesComboBox.SelectedIndex = (FixturesTreeView.SelectedItem as EfcFixtureModel).Modes.Count - 1;
+
+                _FixturesChanged = true;
             }
         }
 
         private void RemoveFixtureModeButton_Click(object sender, RoutedEventArgs e)
         {
-            (FixturesTreeView.SelectedItem as efcFixtureModel).Modes.RemoveAt(FixtureModeChannelsDataGrid.SelectedIndex);
+            (FixturesTreeView.SelectedItem as EfcFixtureModel).Modes.RemoveAt(FixtureModeChannelsDataGrid.SelectedIndex);
+
+            _FixturesChanged = true;
         }
 
         private void FixtureModeChannelAddButton_Click(object sender, RoutedEventArgs e)
         {
             byte channel = ++(FixtureModesComboBox.SelectedItem as efcFixtureMode).ChannelCount;
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.Add(new efcFixtureChannel( channel, "New Channel" ));
+            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.Add(new EfcFixtureChannel( channel, "New Channel" ));
+
+            _FixturesChanged = true;
         }
 
         private void FixtureModeChannelRemoveButton_Click(object sender, RoutedEventArgs e)
         {
             (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.RemoveAt(FixtureModeChannelsDataGrid.SelectedIndex);
+
+            _FixturesChanged = true;
         }
 
         private void FixtureModeChannelMoveUpButton_Click(object sender, RoutedEventArgs e)
@@ -177,8 +199,10 @@ namespace EddieFxCtrl
             // Move the channel in the list
             (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.Move(index_1, index_2);
 
-          //  Console.WriteLine("I1:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].Name);
-          //  Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].Name);
+            _FixturesChanged = true;
+
+            //  Console.WriteLine("I1:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].Name);
+            //  Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].Name);
         }
 
         private void FixtureModeChannelMoveDownButton_Click(object sender, RoutedEventArgs e)
@@ -190,11 +214,108 @@ namespace EddieFxCtrl
             // Update the channel info (channel #1 as index 0..)
             /*(FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].FixtureChannel = (byte)(index_2 + 1);
             (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel = (byte)(index_2);*/
-            (FixtureModeChannelsDataGrid.SelectedItem as efcFixtureChannel).FixtureChannel = (byte)(index_2 + 1);
-            (FixtureModeChannelsDataGrid.Items[index_2] as efcFixtureChannel).FixtureChannel = (byte)(index_2);
+            (FixtureModeChannelsDataGrid.SelectedItem as EfcFixtureChannel).FixtureChannel = (byte)(index_2 + 1);
+            (FixtureModeChannelsDataGrid.Items[index_2] as EfcFixtureChannel).FixtureChannel = (byte)(index_2);
 
             // Move the channel in the list
             (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.Move(index_1, index_2);
+
+            _FixturesChanged = true;
+        }
+
+        private void AddCompanyBtn_Click(object sender, RoutedEventArgs e)
+        {
+            EfcCompany company = new EfcCompany()
+            {
+                Id = _MainWin.MaxCompanyID +1,
+                Name = "Unnamed Company"
+            };
+            _MainWin.Companies.Add(company);
+            _MainWin.MaxCompanyID = company.Id;
+
+            _CompaniesChanged = true;
+        }
+
+        private void DelCompanyBtn_Click(object sender, RoutedEventArgs e)
+        {
+            EfcCompany company = (EfcCompany)CompaniesListBox.SelectedItem;
+
+            if (Xceed.Wpf.Toolkit.MessageBox.Show("Do you really want to remove " + company.Name + "? This will also remove related fixtures!", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                return;
+
+            _MainWin.Companies.Remove(company);
+            company = null;
+            
+            _FixturesChanged = true;
+            _CompaniesChanged = true;
+        }
+
+        private void AddFixtureBtn_Click(object sender, RoutedEventArgs e)
+        {
+            EfcCompany company = null;
+
+            if (FixturesTreeView.SelectedItem is EfcFixtureModel)
+            {
+                company = (FixturesTreeView.SelectedItem as EfcFixtureModel).Company;
+                _MainWin.Log("Selected Item Is FixtureModel");
+            }
+            else if (FixturesTreeView.SelectedItem is EfcCompany)
+            {
+                company = FixturesTreeView.SelectedItem as EfcCompany;
+                _MainWin.Log("Selected Item Is Company");
+            } else
+            {
+                _MainWin.Log("Selected Item Is " + FixturesTreeView.SelectedItem.GetType().ToString());
+            }
+
+            _MainWin.Log("MaxFixtureID:" + _MainWin.MaxFixtureID.ToString());
+
+            if (company == null)
+                return;
+
+            EfcFixtureModel fixture = new EfcFixtureModel()
+            {
+                Id=_MainWin.MaxFixtureID  +1,
+                Name = "Unnamed fixture",
+                Company = company,
+                Manufacturer = company.Id,
+                Type = EfcFixtureType.Par_can
+            };
+            company.Fixtures.Add(fixture);
+            _MainWin.FixtureModels.Add(fixture);
+
+            _MainWin.MaxFixtureID = fixture.Id;
+
+            _FixturesChanged = true;
+        }
+
+        private void DelFixtureBtn_Click(object sender, RoutedEventArgs e)
+        {
+            EfcFixtureModel fixture = FixturesTreeView.SelectedItem as EfcFixtureModel;
+
+            if (Xceed.Wpf.Toolkit.MessageBox.Show("Do you really want to remove " + fixture.Company.Name + " -> " + fixture.Name + "?", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                return;
+            
+            _MainWin.FixtureModels.Remove(fixture);
+            fixture.Company.Fixtures.Remove(fixture);
+            fixture = null;
+
+            _FixturesChanged = true;
+        }
+
+        private void FixtureModeChannelsDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            _FixturesChanged = true;
+        }   
+        
+        private void FixtureInfoTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            _FixturesChanged = true;
+        }
+
+        private void CompanyInfoTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            _CompaniesChanged = true;
         }
     }
     public static class efcPrefUICommands

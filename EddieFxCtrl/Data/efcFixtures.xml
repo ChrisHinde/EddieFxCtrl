@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<efc:data type="fixtures" max_id="2"
+<efc:data type="fixtures" max_id="21"
  xmlns:efc="http://diversum.se/apps/efc.xsd">
   <efc:fixture id="0" company_id="0" type="2">
     <efc:name>Generic dimmer</efc:name>

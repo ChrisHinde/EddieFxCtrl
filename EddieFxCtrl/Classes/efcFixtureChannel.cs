@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace EddieFxCtrl.Classes
 {
-    public class efcFixtureChannel
+    public class EfcFixtureChannel
     {
-        public byte FixtureChannel { get; set; }
+        public UInt16 FixtureChannel { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public efcChannelType Type { get; set; }
+        public EfcChannelType Type { get; set; }
 
-        public efcFixtureChannel( byte channel = 0, string name = "", efcChannelType type = efcChannelType.NoFunction )
+        public EfcFixtureChannel( UInt16 channel = 0, string name = "", EfcChannelType type = EfcChannelType.NoFunction )
         {
             FixtureChannel = channel;
             Name = name;

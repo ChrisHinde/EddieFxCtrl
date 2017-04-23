@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace EddieFxCtrl.Classes
 {
-    enum efcRunningMode
+    enum EfcRunningMode
     {
         Programming,
         Running
     };
 
-    enum efcMasterMode
+    enum EfcMasterMode
     {
         Smart,
         ColorAndDimming,
@@ -21,7 +21,7 @@ namespace EddieFxCtrl.Classes
         AllChannels
     };
 
-    enum efcBlackoutMode
+    enum EfcBlackoutMode
     {
         Master,
         Smart,
@@ -31,7 +31,7 @@ namespace EddieFxCtrl.Classes
         AllChannels
     };
 
-    enum efcOutputMode
+    enum EfcOutputMode
     {
         OnlyUsed,
         First_16,

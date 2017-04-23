@@ -1,4 +1,4 @@
-﻿<Window x:Class="EddieFxCtrl.efcMainWindow"
+﻿<Window x:Class="EddieFxCtrl.EfcMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,7 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:bot="http://schemas.thinkpixellab.com/2011/xaml/presentation"
         mc:Ignorable="d"
-        Title="Eddie Fx Controller" Height="720" Width="900" WindowState="Maximized" Closing="Window_Closing">
+        Title="Eddie Fx Controller" Height="781.449" Width="1159.451" WindowState="Maximized" Closing="Window_Closing">
     <Window.CommandBindings>
         <CommandBinding Command="local:EfcUICommands.Quit" CanExecute="GeneralCommand_CanExecute" Executed="QuitCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.Preferences" CanExecute="GeneralCommand_CanExecute" Executed="PreferencesCommand_Executed" />
@@ -16,6 +16,10 @@
         <CommandBinding Command="local:EfcUICommands.ScreenScenes" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.ScreenInfo" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.ScreenOutput" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+
+        <CommandBinding Command="local:EfcFixturesCtrlUICommands.AddFixture" CanExecute="AddFixture_CanExecute" Executed="AddFixture_Executed" />
+
+        <CommandBinding Command="local:EfcUICommands.RunMode" CanExecute="GeneralCommand_CanExecute" Executed="RunModeCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.Blackout" CanExecute="GeneralCommand_CanExecute" Executed="BlackoutCommand_Executed" />
     </Window.CommandBindings>
     <DockPanel>
@@ -38,21 +42,38 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Commands">
+                <MenuItem Command="local:EfcUICommands.RunMode" />
                 <MenuItem Command="local:EfcUICommands.Blackout" />
+                <Separator />
+                <MenuItem Command="local:EfcFixturesCtrlUICommands.AddFixture" />
             </MenuItem>
             <MenuItem Header="_Help">
             </MenuItem>
         </Menu>
-        <ToolBarTray Height="42" DockPanel.Dock="Top">
-            <ToolBar x:Name="outputToolBar" Margin="0">
-                <Button x:Name="ModeToolBarButton" Height="36">
+        <ToolBarTray Height="42" DockPanel.Dock="Top" HorizontalAlignment="Right">
+            <ToolBar x:Name="outputToolBar" HorizontalAlignment="Right">
+                <Button x:Name="ModeToolBarButton" Height="36" Click="ModeToolBarButton_Click">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                                         AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="ToolTip" Value="In Run mode! Click to exit run mode! (F9)" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                    <Setter Property="ToolTip" Value="In Program mode! Click to enter run mode! (F9)" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                     <StackPanel Orientation="Horizontal" Margin="0">
                         <Image Height="Auto" Margin="0,0,5,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Setter Property="Source" Value="{StaticResource Icon_Play}" />
                                     <Style.Triggers>
-                                        <DataTrigger  Binding="{Binding BlackoutActive, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        <DataTrigger  Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, 
                                                          AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                             <Setter Property="Source" Value="{StaticResource Icon_Stop}" />
                                         </DataTrigger>
@@ -108,7 +129,7 @@
         </StatusBar>
         <TabControl x:Name="MainTabCtrl" TabStripPlacement="Bottom">
             <TabItem Header="_Fixtures" Name="FixturesTab">
-                <Grid/>
+                    <local:efcFixturesCtrl x:Name="FixturesCtrl" />
             </TabItem>
             <TabItem Header="_Effects" Name="EffectsTab">
                 <Grid Background="#FFE5E5E5"/>

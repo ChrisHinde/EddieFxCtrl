@@ -1,4 +1,4 @@
-﻿<Window x:Name="efcPreferencesWin" x:Class="EddieFxCtrl.efcPreferencesWindow"
+﻿<Window x:Name="EfcPreferencesWin" x:Class="EddieFxCtrl.EfcPreferencesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -18,30 +18,30 @@
         <ObjectDataProvider x:Key="ChannelTypes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local_classes:efcChannelType"/>
+                <x:Type TypeName="local_classes:EfcChannelType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="MasterModes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local_classes:efcMasterMode"/>
+                <x:Type TypeName="local_classes:EfcMasterMode"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="BlackoutModes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local_classes:efcBlackoutMode"/>
+                <x:Type TypeName="local_classes:EfcBlackoutMode"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="efcOutputMode" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local_classes:efcOutputMode"/>
+                <x:Type TypeName="local_classes:EfcOutputMode"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        <DataTemplate x:Key="CompanyItemTemplate">
+        <!--DataTemplate x:Key="CompanyItemTemplate">
             <TextBlock Text="{Binding Name}" />
-        </DataTemplate>
+        </>
         <HierarchicalDataTemplate x:Key="FixtureItemTemplate" ItemsSource="{Binding Fixtures}">
             <TextBlock Text="{Binding Name}" />
             <HierarchicalDataTemplate.ItemTemplate>
@@ -49,7 +49,7 @@
                     <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </HierarchicalDataTemplate.ItemTemplate>
-        </HierarchicalDataTemplate>
+        </HierarchicalDataTemplate-->
         <DataTemplate x:Key="FixtureModeTemplate">
             <TextBlock Text="{Binding Name}" />
         </DataTemplate>
@@ -108,12 +108,12 @@
                                         <ColumnDefinition Width="1*" />
                                         <ColumnDefinition Width="1*" />
                                     </Grid.ColumnDefinitions>
-                                    <Button Name="AddFixtureBtn" Margin="3">
+                                    <Button Name="AddFixtureBtn" Margin="3" Click="AddFixtureBtn_Click">
                                         <Button.Style>
                                             <Style>
                                                 <Setter Property="Button.IsEnabled" Value="True" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=FixturesTreeView, Path=SelectedValue, FallbackValue=-1}" Value="-1">
+                                                    <DataTrigger Binding="{Binding ElementName=FixturesTreeView, Path=SelectedValue.Id, FallbackValue=-1}" Value="-1">
                                                         <Setter Property="Button.IsEnabled" Value="False" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -121,7 +121,7 @@
                                         </Button.Style>
                                         _Add
                                     </Button>
-                                    <Button Name="DelFixtureBtn" Grid.Column="1" Margin="3">
+                                    <Button Name="DelFixtureBtn" Grid.Column="1" Margin="3" Click="DelFixtureBtn_Click">
                                         <Button.Style>
                                             <Style>
                                                 <Setter Property="Button.IsEnabled" Value="True" />
@@ -175,14 +175,14 @@
                                         <RowDefinition Height="18" />
                                     </Grid.RowDefinitions>
                                     <Label Name="FixtureNameLabel"  Grid.Row="0" Margin="0" Padding="0" Target="{Binding ElementName=FixtureNameTextBox}">Name:</Label>
-                                    <TextBox Name="FixtureNameTextBox" Grid.Row="1" Grid.ColumnSpan="4" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Name}" />
+                                    <TextBox Name="FixtureNameTextBox" Grid.Row="1" Grid.ColumnSpan="4" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Name}" KeyDown="FixtureInfoTextBox_KeyDown" />
                                     <Label Name="FixtureImageLabel"  Grid.Row="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureImageTextBox}">Image:</Label>
-                                    <TextBox Name="FixtureImageTextBox" Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Image}" />
+                                    <TextBox Name="FixtureImageTextBox" Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Image}" Height="20" VerticalAlignment="Top" KeyDown="FixtureInfoTextBox_KeyDown" />
                                     <Button x:Name="FixtureImageButton" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" Click="FixtureImageButton_Click">
                                         <Image Margin="0" Source="{StaticResource Icon_Ellipsis}" />
                                     </Button>
                                     <Label Name="FixtureDescriptionLabel"  Grid.Row="4" Grid.ColumnSpan="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureDescriptionTextBox}">Description:</Label>
-                                    <TextBox Name="FixtureDescriptionTextBox" Grid.Row="5" Grid.ColumnSpan="4" TextWrapping="Wrap" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Description}" />
+                                    <TextBox Name="FixtureDescriptionTextBox" Grid.Row="5" Grid.ColumnSpan="4" TextWrapping="Wrap" Text="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Description}" KeyDown="FixtureInfoTextBox_KeyDown" />
                                     <Label Name="FixtureModesLabel"  Grid.Row="6" Grid.ColumnSpan="2" Margin="0" Padding="0" Target="{Binding ElementName=FixtureModesListBox}">Modes:</Label>
                                     <ComboBox Name="FixtureModesComboBox" Grid.Row="7" Grid.ColumnSpan="2" ItemsSource="{Binding ElementName=FixturesTreeView, Path=SelectedItem.Modes, Mode=TwoWay}" ItemTemplate="{StaticResource FixtureModeTemplate}" IsSynchronizedWithCurrentItem="True" SelectionChanged="FixtureModesCombBox_SelectionChanged" />
                                     <Button Name="AddFixtureModeButton" Grid.Row="7" Grid.Column="2" ToolTip="Add mode" Click="AddFixtureModeButton_Click">
@@ -193,7 +193,7 @@
                                     </Button>
                                     <Label Name="FixtureModeChannelsLabel"  Grid.Row="8" Grid.ColumnSpan="2" Margin="0" Padding="0">Mode channels:</Label>
                                     <!--ListBox Name="FixtureModeChannelsListBox" Grid.Row="9" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding ElementName=FixtureModesComboBox, Path=SelectedItem.Channels, Mode=TwoWay}" ItemTemplate="{StaticResource FixtureModeChannelTemplate}" /-->
-                                    <DataGrid Name="FixtureModeChannelsDataGrid" Grid.Row="9" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding ElementName=FixtureModesComboBox, Path=SelectedItem.Channels, Mode=TwoWay}" AutoGenerateColumns="False">
+                                    <DataGrid Name="FixtureModeChannelsDataGrid" Grid.Row="9" Grid.ColumnSpan="3" Grid.RowSpan="5" ItemsSource="{Binding ElementName=FixtureModesComboBox, Path=SelectedItem.Channels, Mode=TwoWay}" AutoGenerateColumns="False" CellEditEnding="FixtureModeChannelsDataGrid_CellEditEnding">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="#" Binding="{Binding FixtureChannel}" IsReadOnly="True" />
                                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="1*" IsReadOnly="False" />
@@ -266,8 +266,8 @@
                                         <ColumnDefinition Width="1*" />
                                         <ColumnDefinition Width="1*" />
                                     </Grid.ColumnDefinitions>
-                                    <Button Name="AddCompanyBtn" Margin="3">_Add</Button>
-                                    <Button Name="DelCompanyBtn" Grid.Column="1" Margin="3">
+                                    <Button Name="AddCompanyBtn" Margin="3" Click="AddCompanyBtn_Click">_Add</Button>
+                                    <Button Name="DelCompanyBtn" Grid.Column="1" Margin="3" Click="DelCompanyBtn_Click">
                                         <Button.Style>
                                             <Style>
                                                 <Setter Property="Button.IsEnabled" Value="True" />
@@ -319,11 +319,11 @@
                                         <RowDefinition Height="18" />
                                     </Grid.RowDefinitions>
                                     <Label Name="CompanyNameLabel"  Grid.Row="0" Margin="0" Padding="0" Target="{Binding ElementName=CompanyNameTextBox}">Name:</Label>
-                                    <TextBox Name="CompanyNameTextBox" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Name}"></TextBox>
+                                    <TextBox Name="CompanyNameTextBox" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Name}" KeyDown="CompanyInfoTextBox_KeyDown"></TextBox>
                                     <Label Name="CompanyUrlLabel"  Grid.Row="2" Margin="0" Padding="0" Target="{Binding ElementName=CompanyUrlTextBox}">URL:</Label>
-                                    <TextBox Name="CompanyUrlTextBox" Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Url}"></TextBox>
+                                    <TextBox Name="CompanyUrlTextBox" Grid.Row="3" Grid.ColumnSpan="3" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Url}" KeyDown="CompanyInfoTextBox_KeyDown"></TextBox>
                                     <Label Name="CompanyLogoLabel"  Grid.Row="4" Margin="0" Padding="0" Target="{Binding ElementName=CompanyLogoTextBox}">Logo:</Label>
-                                    <TextBox Name="CompanyLogoTextBox" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Logo}"></TextBox>
+                                    <TextBox Name="CompanyLogoTextBox" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding ElementName=CompaniesListBox, Path=SelectedValue.Logo}" KeyDown="CompanyInfoTextBox_KeyDown"></TextBox>
                                     <Label Name="CompanyFixturesLabel"  Grid.Row="7" Margin="0" Padding="0">Fixtures:</Label>
                                     <Label Name="CompanyFixturesValueLabel"  Grid.Row="7" Grid.Column="1" Margin="0" Padding="0" Grid.ColumnSpan="2" Content="{Binding ElementName=CompaniesListBox, Path=SelectedValue.FixtureCount, FallbackValue='0'}" />
                                     <Label Name="CompanyIdLabel"  Grid.Row="8" Margin="0" Padding="0">ID:</Label>
@@ -363,7 +363,7 @@
                 <TabControl>
                     <TabItem Name="MQTTNetworkPrefTab" Header="_MQTT">
                     </TabItem>
-                    <TabItem Name="_NetworkPrefTab" Header="_">
+                    <TabItem Name="_NetworkPrefTab" Header="_Socket">
                     </TabItem>
                 </TabControl>
             </TabItem>

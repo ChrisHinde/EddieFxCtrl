@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace EddieFxCtrl.Classes
 {
-    public class efcCompany
+    public class EfcCompany
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
         public string Logo { get; set; }
         public int FixtureCount { get { return Fixtures.Count; } }
-        public ObservableCollection<efcFixtureModel> Fixtures { get; set; }
+        public ObservableCollection<EfcFixtureModel> Fixtures { get; set; }
 
-        public efcCompany(string name = "", int id = -1, string url = "", string logo = "", int fixCount = 0)
+        public EfcCompany(string name = "", int id = -1, string url = "", string logo = "", int fixCount = 0)
         {
             this.Name = name;
             this.Id = id;
@@ -26,7 +26,7 @@ namespace EddieFxCtrl.Classes
 
             //this.FixtureCount = fixCount;
 
-            this.Fixtures = new ObservableCollection<efcFixtureModel>();
+            this.Fixtures = new ObservableCollection<EfcFixtureModel>();
         }
 
         public override string ToString()

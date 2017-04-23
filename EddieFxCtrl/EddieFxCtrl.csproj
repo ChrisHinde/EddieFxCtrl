@@ -80,6 +80,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -126,6 +128,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="efcChannelPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="efcChannelPreviewCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="efcFixtureAddWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="efcFixturesCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="efcMainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -134,13 +152,32 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\efcAddressInUseException.cs" />
     <Compile Include="Classes\efcChannelType.cs" />
     <Compile Include="Classes\efcCompany.cs" />
+    <Compile Include="Classes\efcFixture.cs" />
     <Compile Include="Classes\efcFixtureChannel.cs" />
     <Compile Include="Classes\efcFixtureMode.cs" />
     <Compile Include="Classes\efcFixtureModel.cs" />
     <Compile Include="Classes\efcFixtureType.cs" />
     <Compile Include="Classes\efcModes.cs" />
+    <Compile Include="Classes\efcPatch.cs" />
+    <Compile Include="Classes\efcScene.cs" />
+    <Compile Include="Classes\efcShow.cs" />
+    <Compile Include="Classes\efcSoftPatch.cs" />
+    <Compile Include="Classes\efcUniverse.cs" />
+    <Compile Include="efcChannelPanel.xaml.cs">
+      <DependentUpon>efcChannelPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="efcChannelPreviewCtrl.xaml.cs">
+      <DependentUpon>efcChannelPreviewCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="efcFixtureAddWindow.xaml.cs">
+      <DependentUpon>efcFixtureAddWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="efcFixturesCtrl.xaml.cs">
+      <DependentUpon>efcFixturesCtrl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="efcMainWindow.xaml.cs">
       <DependentUpon>efcMainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -371,6 +408,12 @@
     <Resource Include="Resources\Images\ic_play_grey600_48dp.png" />
     <Resource Include="Resources\Images\ic_stop_black_48dp.png" />
     <Resource Include="Resources\Images\ic_stop_grey600_48dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ic_pause_black_48dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

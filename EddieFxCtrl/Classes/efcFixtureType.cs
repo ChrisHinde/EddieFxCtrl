@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EddieFxCtrl.Classes
 {
-    public enum efcFixtureType
+    public enum EfcFixtureType
     {
         Unknown = 0,
         Par_can,

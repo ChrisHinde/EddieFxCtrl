@@ -7,21 +7,22 @@ using System.Threading.Tasks;
 
 namespace EddieFxCtrl.Classes
 {
-    public class efcFixtureModel
+    public class EfcFixtureModel
     {
         public int Id { get; set; }
         public int Manufacturer { get; set; }
-        public efcFixtureType Type { get; set; }
+        public EfcFixtureType Type { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
+        public EfcCompany Company { get; set; }
 
         public byte TotalChannelCount { get; set; }
 
         public int MaxModeId = -1;
         public ObservableCollection<efcFixtureMode> Modes { get; set; }
 
-        public efcFixtureModel()
+        public EfcFixtureModel()
         {
             Modes = new ObservableCollection<efcFixtureMode>();
         }
