@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EddieFxCtrl.Classes
 {
-    public class efcFixtureMode
+    public class EfcFixtureMode
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -15,7 +15,14 @@ namespace EddieFxCtrl.Classes
 
         public ObservableCollection<EfcFixtureChannel> Channels { get; set; }
 
-        public efcFixtureMode( int id = -1, string name = "" )
+        public EfcFixtureMode()
+        {
+            Id = -1;
+            Name = "";
+
+            Channels = new ObservableCollection<EfcFixtureChannel>();
+        }
+        public EfcFixtureMode( int id, string name = "" )
         {
             Id = id;
             Name = name;

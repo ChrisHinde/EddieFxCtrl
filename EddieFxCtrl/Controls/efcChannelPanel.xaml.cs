@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EddieFxCtrl;
 
-namespace EddieFxCtrl
+namespace EddieFxCtrl.Controls
 {
     /// <summary>
     /// Interaction logic for efcChannelPanel.xaml
     /// </summary>
-    public partial class efcChannelPanel : UserControl, INotifyPropertyChanged
+    public partial class EfcChannelPanel : UserControl, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private EfcMainWindow _MainWin;
@@ -34,39 +35,46 @@ namespace EddieFxCtrl
                 if (value != _isPaused)
                 {
                     _isPaused = value;
-                    _MainWin.Log("ChannelPreview " + (_isPaused ? "PAUSED" : "RUNNING"));
+                    channelView.IsPaused = value;
+                    _MainWin.Log("ChannelView " + (_isPaused ? "PAUSED" : "RUNNING"));
                     NotifyPropertyChanged();
                 }
             }
         }
         public EfcMainWindow MainWindow
         {
-            set { _MainWin = value; }
+            set {
+                _MainWin = value;
+                channelView.MainWindow = value;
+            }
         }
 
-        public efcChannelPanel()
+        public EfcChannelPanel()
         {
             InitializeComponent();
+
+            //channelPreview.MainWindow = _MainWin;
+            pageComboBox.SelectedIndex = 0;
 
             CalculatePages();
         }
 
-        private void channelsPerPageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ChannelsPerPageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (channelPreview is null)
+            if (channelView is null)
                 return;
 
-            channelPreview.ChannelCount = Convert.ToUInt16(((ComboBoxItem)channelsPerPageComboBox.SelectedItem).Content);
+            channelView.ChannelCount = Convert.ToUInt16(((ComboBoxItem)channelsPerPageComboBox.SelectedItem).Content);
 
             CalculatePages();
         }
 
         private void CalculatePages()
         {
-            channelPreview.ChannelStart = 1;
+            channelView.ChannelStart = 1;
             pageComboBox.Items.Clear();
 
-            int pages = 512 / channelPreview.ChannelCount;
+            int pages = 512 / channelView.ChannelCount;
 
             for (int i=0; i < pages; i++)
             {
@@ -76,11 +84,13 @@ namespace EddieFxCtrl
             pageComboBox.SelectedIndex = 0;
         }
 
-        private void pageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int page = pageComboBox.SelectedIndex;
+            if (page == -1)
+                page = 0;
 
-            channelPreview.ChannelStart = (UInt16)(channelPreview.ChannelCount * page + 1);
+            channelView.ChannelStart = (UInt16)(channelView.ChannelCount * page + 1);
         }
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")

@@ -16,7 +16,15 @@ namespace EddieFxCtrl.Classes
         public int FixtureCount { get { return Fixtures.Count; } }
         public ObservableCollection<EfcFixtureModel> Fixtures { get; set; }
 
-        public EfcCompany(string name = "", int id = -1, string url = "", string logo = "", int fixCount = 0)
+        public EfcCompany()
+        {
+            this.Name = "";
+            this.Id = -1;
+            this.Url = "";
+            this.Logo = "";
+            this.Fixtures = new ObservableCollection<EfcFixtureModel>();
+        }
+        public EfcCompany(string name, int id = -1, string url = "", string logo = "", int fixCount = 0)
         {
             this.Name = name;
             this.Id = id;

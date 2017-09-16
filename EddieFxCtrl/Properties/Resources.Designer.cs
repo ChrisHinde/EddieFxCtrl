@@ -84,7 +84,7 @@ namespace EddieFxCtrl.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;efc:data type=&quot;fixtures&quot; max_id=&quot;2&quot;
+        ///&lt;efc:data type=&quot;fixtures&quot; max_id=&quot;21&quot;
         /// xmlns:efc=&quot;http://diversum.se/apps/efc.xsd&quot;&gt;
         ///  &lt;efc:fixture id=&quot;0&quot; company_id=&quot;0&quot; type=&quot;2&quot;&gt;
         ///    &lt;efc:name&gt;Generic dimmer&lt;/efc:name&gt;
@@ -96,11 +96,20 @@ namespace EddieFxCtrl.Properties {
         ///        &lt;efc:channels&gt;
         ///          &lt;efc:channel channel=&quot;1&quot; type=&quot;10&quot;&gt;
         ///            &lt;efc:name&gt;Dimmer&lt;/efc:name&gt;
-        ///            &lt;efc:descr [rest of string was truncated]&quot;;.
+        ///            &lt;efc:desc [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string efcFixtures {
             get {
                 return ResourceManager.GetString("efcFixtures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EddieFx Effect (*.eff;*.effx)|*.efc;*.efsc|All files|*.*.
+        /// </summary>
+        internal static string FileExtensions_Effects {
+            get {
+                return ResourceManager.GetString("FileExtensions_Effects", resourceCulture);
             }
         }
         
@@ -110,6 +119,42 @@ namespace EddieFxCtrl.Properties {
         internal static string FileExtensions_Images {
             get {
                 return ResourceManager.GetString("FileExtensions_Images", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EddieFx Scene (*.efs;*.efsh)|*.efc;*.efsc|All files|*.*.
+        /// </summary>
+        internal static string FileExtensions_Scene {
+            get {
+                return ResourceManager.GetString("FileExtensions_Scene", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EddieFx Show (*.efs;*.efsh)|*.efs;*.efsh|All files|*.*.
+        /// </summary>
+        internal static string FileExtensions_Show {
+            get {
+                return ResourceManager.GetString("FileExtensions_Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %USERPROFILE%\My Documents.
+        /// </summary>
+        internal static string Files_InitialDirectory {
+            get {
+                return ResourceManager.GetString("Files_InitialDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.1.
+        /// </summary>
+        internal static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
     }

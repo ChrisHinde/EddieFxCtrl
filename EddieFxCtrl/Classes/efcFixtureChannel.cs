@@ -13,7 +13,13 @@ namespace EddieFxCtrl.Classes
         public string Description { get; set; }
         public EfcChannelType Type { get; set; }
 
-        public EfcFixtureChannel( UInt16 channel = 0, string name = "", EfcChannelType type = EfcChannelType.NoFunction )
+        public EfcFixtureChannel()
+        {
+            FixtureChannel = 0;
+            Name = "";
+            Type = EfcChannelType.NoFunction;
+        }
+        public EfcFixtureChannel( UInt16 channel, string name = "", EfcChannelType type = EfcChannelType.NoFunction )
         {
             FixtureChannel = channel;
             Name = name;

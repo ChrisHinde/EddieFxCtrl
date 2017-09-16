@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="EddieFxCtrl.efcChannelPanel"
+﻿<UserControl x:Class="EddieFxCtrl.Controls.EfcChannelPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EddieFxCtrl"
+             xmlns:localCtrl="clr-namespace:EddieFxCtrl.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="400">
     <Grid>
@@ -21,15 +21,15 @@
                     <ComboBoxItem Content="4" />
                 </ComboBox>
                 <Label Content="Per page:" />
-                <ComboBox Name="channelsPerPageComboBox" Margin="0" Width="40" SelectionChanged="channelsPerPageComboBox_SelectionChanged">
+                <ComboBox Name="channelsPerPageComboBox" Margin="0" Width="40" SelectionChanged="ChannelsPerPageComboBox_SelectionChanged">
                     <ComboBoxItem Content="32"/>
-                    <ComboBoxItem Content="64"/>
-                    <ComboBoxItem Content="128" IsSelected="True" />
+                    <ComboBoxItem Content="64" IsSelected="True"/>
+                    <ComboBoxItem Content="128" />
                     <ComboBoxItem Content="256"/>
                     <ComboBoxItem Content="512"/>
                 </ComboBox>
                 <Label Content="Page:" />
-                <ComboBox Name="pageComboBox" Margin="0" Width="40" SelectionChanged="pageComboBox_SelectionChanged"/>
+                <ComboBox Name="pageComboBox" Margin="0" Width="40" SelectionChanged="PageComboBox_SelectionChanged"/>
                 <Button Width="30" Height="27" Margin="0" Name="PauseButton" ToolTip="Pause Update" Click="PauseButton_Click">
                     <StackPanel  Orientation="Horizontal" Margin="0">
                     <Image Stretch="Fill" MinWidth="18" MinHeight="24">
@@ -49,6 +49,6 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <local:EfcChannelPreviewCtrl Grid.Row="1" x:Name="channelPreview" />
+        <localCtrl:EfcChannelView Grid.Row="1" x:Name="channelView" />
     </Grid>
 </UserControl>

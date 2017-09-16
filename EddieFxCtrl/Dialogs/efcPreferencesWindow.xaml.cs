@@ -1,4 +1,5 @@
-﻿using EddieFxCtrl.Classes;
+﻿using EddieFxCtrl;
+using EddieFxCtrl.Classes;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Globalization;
 
-namespace EddieFxCtrl
+namespace EddieFxCtrl.Dialogs
 {
     public class IsLastModeChannelConverter : IValueConverter
     {
@@ -123,7 +124,7 @@ namespace EddieFxCtrl
         {
             /*if (FixtureModesComboBox.SelectedItem != null)
             {
-                FixtureModeChannelsDataGrid.ItemsSource = (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels;
+                FixtureModeChannelsDataGrid.ItemsSource = (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels;
                 
             }*/
         }
@@ -153,7 +154,7 @@ namespace EddieFxCtrl
             if (prompt.ShowDialog() == true)
             {
                 int new_id = ++(FixturesTreeView.SelectedItem as EfcFixtureModel).MaxModeId;
-                (FixturesTreeView.SelectedItem as EfcFixtureModel).Modes.Add(new efcFixtureMode(new_id, prompt.Answer));
+                (FixturesTreeView.SelectedItem as EfcFixtureModel).Modes.Add(new EfcFixtureMode(new_id, prompt.Answer));
 
                 FixtureModesComboBox.SelectedIndex = (FixturesTreeView.SelectedItem as EfcFixtureModel).Modes.Count - 1;
 
@@ -170,15 +171,15 @@ namespace EddieFxCtrl
 
         private void FixtureModeChannelAddButton_Click(object sender, RoutedEventArgs e)
         {
-            byte channel = ++(FixtureModesComboBox.SelectedItem as efcFixtureMode).ChannelCount;
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.Add(new EfcFixtureChannel( channel, "New Channel" ));
+            byte channel = ++(FixtureModesComboBox.SelectedItem as EfcFixtureMode).ChannelCount;
+            (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels.Add(new EfcFixtureChannel( channel, "New Channel" ));
 
             _FixturesChanged = true;
         }
 
         private void FixtureModeChannelRemoveButton_Click(object sender, RoutedEventArgs e)
         {
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.RemoveAt(FixtureModeChannelsDataGrid.SelectedIndex);
+            (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels.RemoveAt(FixtureModeChannelsDataGrid.SelectedIndex);
 
             _FixturesChanged = true;
         }
@@ -188,21 +189,21 @@ namespace EddieFxCtrl
             int index_1 = FixtureModeChannelsDataGrid.SelectedIndex;
             int index_2 = index_1 - 1;
 
-            //Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].Name);
+            //Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].Name);
 
             // Update the channel info (channel #1 as index 0..)
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].FixtureChannel = (byte)(index_1);
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel = (byte)(index_1 + 1);
+            (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_1].FixtureChannel = (byte)(index_1);
+            (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].FixtureChannel = (byte)(index_1 + 1);
 
-           // Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].Name);
+           // Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].Name);
 
             // Move the channel in the list
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.Move(index_1, index_2);
+            (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels.Move(index_1, index_2);
 
             _FixturesChanged = true;
 
-            //  Console.WriteLine("I1:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].Name);
-            //  Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].Name);
+            //  Console.WriteLine("I1:" + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_1].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_1].Name);
+            //  Console.WriteLine("I2:" + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].FixtureChannel.ToString() + ";; " + (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].Name);
         }
 
         private void FixtureModeChannelMoveDownButton_Click(object sender, RoutedEventArgs e)
@@ -212,13 +213,13 @@ namespace EddieFxCtrl
 
 
             // Update the channel info (channel #1 as index 0..)
-            /*(FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_1].FixtureChannel = (byte)(index_2 + 1);
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels[index_2].FixtureChannel = (byte)(index_2);*/
+            /*(FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_1].FixtureChannel = (byte)(index_2 + 1);
+            (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels[index_2].FixtureChannel = (byte)(index_2);*/
             (FixtureModeChannelsDataGrid.SelectedItem as EfcFixtureChannel).FixtureChannel = (byte)(index_2 + 1);
             (FixtureModeChannelsDataGrid.Items[index_2] as EfcFixtureChannel).FixtureChannel = (byte)(index_2);
 
             // Move the channel in the list
-            (FixtureModesComboBox.SelectedItem as efcFixtureMode).Channels.Move(index_1, index_2);
+            (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels.Move(index_1, index_2);
 
             _FixturesChanged = true;
         }

@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EddieFxCtrl"
+        xmlns:localCtrl="clr-namespace:EddieFxCtrl.Controls"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:bot="http://schemas.thinkpixellab.com/2011/xaml/presentation"
         mc:Ignorable="d"
         Title="Eddie Fx Controller" Height="781.449" Width="1159.451" WindowState="Maximized" Closing="Window_Closing">
     <Window.CommandBindings>
         <CommandBinding Command="local:EfcUICommands.Quit" CanExecute="GeneralCommand_CanExecute" Executed="QuitCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.NewShow" CanExecute="NewShowCommand_CanExecute" Executed="NewShowCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.SaveShow" CanExecute="SaveShowCommand_CanExecute" Executed="SaveShowCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.SaveShowAs" CanExecute="SaveShowAsCommand_CanExecute" Executed="SaveShowAsCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.OpenShow" CanExecute="OpenShowCommand_CanExecute" Executed="OpenShowCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.Preferences" CanExecute="GeneralCommand_CanExecute" Executed="PreferencesCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.ScreenFixtures" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.ScreenEffects" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
@@ -17,7 +22,7 @@
         <CommandBinding Command="local:EfcUICommands.ScreenInfo" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.ScreenOutput" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
 
-        <CommandBinding Command="local:EfcFixturesCtrlUICommands.AddFixture" CanExecute="AddFixture_CanExecute" Executed="AddFixture_Executed" />
+        <CommandBinding Command="localCtrl:EfcFixturesCtrlUICommands.AddFixture" CanExecute="AddFixture_CanExecute" Executed="AddFixture_Executed" />
 
         <CommandBinding Command="local:EfcUICommands.RunMode" CanExecute="GeneralCommand_CanExecute" Executed="RunModeCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.Blackout" CanExecute="GeneralCommand_CanExecute" Executed="BlackoutCommand_Executed" />
@@ -25,6 +30,10 @@
     <DockPanel>
         <Menu x:Name="menu" Height="21" DockPanel.Dock="Top">
             <MenuItem Header="_File">
+                <MenuItem Command="local:EfcUICommands.NewShow" />
+                <MenuItem Command="local:EfcUICommands.OpenShow" />
+                <MenuItem Command="local:EfcUICommands.SaveShow" />
+                <MenuItem Command="local:EfcUICommands.SaveShowAs" />
                 <Separator/>
                 <MenuItem Command="local:EfcUICommands.Quit" />
             </MenuItem>
@@ -45,7 +54,7 @@
                 <MenuItem Command="local:EfcUICommands.RunMode" />
                 <MenuItem Command="local:EfcUICommands.Blackout" />
                 <Separator />
-                <MenuItem Command="local:EfcFixturesCtrlUICommands.AddFixture" />
+                <MenuItem Command="localCtrl:EfcFixturesCtrlUICommands.AddFixture" />
             </MenuItem>
             <MenuItem Header="_Help">
             </MenuItem>
@@ -122,14 +131,17 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <StatusBar x:Name="MainStatusBar" DockPanel.Dock="Bottom">
-            <StatusBarItem>
+        <StatusBar x:Name="MainStatusBar" DockPanel.Dock="Bottom" HorizontalAlignment="Left">
+            <StatusBarItem Width="200">
                 <TextBlock x:Name="MainStatus">Welcome to Eddie Fx!</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem Width="150">
+                <TextBlock x:Name="ShowName" Text="{Binding CurrentShow.Name}"/>
             </StatusBarItem>
         </StatusBar>
         <TabControl x:Name="MainTabCtrl" TabStripPlacement="Bottom">
             <TabItem Header="_Fixtures" Name="FixturesTab">
-                    <local:efcFixturesCtrl x:Name="FixturesCtrl" />
+                <localCtrl:EfcFixturesCtrl x:Name="FixturesCtrl" Height="auto" Width="auto" />
             </TabItem>
             <TabItem Header="_Effects" Name="EffectsTab">
                 <Grid Background="#FFE5E5E5"/>
@@ -160,7 +172,7 @@
                     </TabItem>
                 </TabControl>
             </TabItem>
-            <TabItem Header="_Output"  Name="OutputTab">
+            <TabItem Header="_Control"  Name="OutputTab">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />

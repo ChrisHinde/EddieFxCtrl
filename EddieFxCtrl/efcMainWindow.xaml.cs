@@ -1,4 +1,5 @@
 ﻿using EddieFxCtrl.Classes;
+using EddieFxCtrl.Dialogs;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,8 +7,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace EddieFxCtrl
 {
@@ -17,6 +21,8 @@ namespace EddieFxCtrl
     public partial class EfcMainWindow : Window, INotifyPropertyChanged
     {
         public const int FIXTURES = 0, EFFECTS = 1, SCENES = 2, INFO = 3, OUTPUT = 4;
+        public const int MAX_UNIVERSES = 4;
+        
         public ObservableCollection<EfcCompany> Companies;
         public int MaxCompanyID = 0;
 
@@ -26,6 +32,12 @@ namespace EddieFxCtrl
         public EfcShow CurrentShow;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public event EfcValuesUpdatedEventHandler OnValuesUpdated;
+        public event EfcChannelChangedEventHandler OnChannelChanged;
+        public event EfcPatchChangedEventHandler OnPatchChanged;
+        public event EfcCSoftPatchChangedEventHandler OnSoftPatchChanged;
+        public event EfcUpdateEventHandler OnUpdate;
 
         private bool _blackoutActive;
         public bool BlackoutActive
@@ -55,12 +67,19 @@ namespace EddieFxCtrl
                 }
             }
         }
+        private EfcPriorityMode _PriorityMode;
+        public EfcPriorityMode PriorityMode
+        {
+            get => _PriorityMode;
+            set => _PriorityMode = value;
+        }
 
         public EfcMainWindow()
         {
             InitializeComponent();
 
             CurrentShow = new EfcShow(this);
+            CurrentShow.Name = "New Show";
 
             FixturesCtrl.SetMainWin(this);
 
@@ -70,6 +89,7 @@ namespace EddieFxCtrl
 
             //MainTabCtrl.SelectedIndex = INFO;
             //InfoTabControl.SelectedIndex = 1;
+            PriorityMode = EfcPriorityMode.LTP;
 
             IsRunning = false;
             BlackoutActive = Properties.Settings.Default.BlackoutDefault;
@@ -182,7 +202,7 @@ namespace EddieFxCtrl
                     Image = el.Element(ns + "image").Value
                 };
                 EfcFixtureChannel channel;
-                efcFixtureMode mode;
+                EfcFixtureMode mode;
                 byte totalChannelCount = 0;
 
                 var modes = el.Element(ns + "modes").Elements(ns + "mode");
@@ -190,7 +210,7 @@ namespace EddieFxCtrl
 
                 foreach (XElement m in modes)
                 {
-                    mode = new efcFixtureMode()
+                    mode = new EfcFixtureMode()
                     {
                         Id = Convert.ToInt32(m.Attribute("id").Value),
                         Name = m.Element(ns + "name").Value
@@ -310,7 +330,7 @@ namespace EddieFxCtrl
 
                 fModes = new XElement(ns + "modes");
 
-                foreach (efcFixtureMode mode in fixture.Modes)
+                foreach (EfcFixtureMode mode in fixture.Modes)
                 {
                     fMode = new XElement(ns + "mode");
 
@@ -351,6 +371,31 @@ namespace EddieFxCtrl
             Log("Fixture info saved to: " + Properties.Settings.Default.FixturesFile);
         }
 
+        public void ValuesUpdated(object sender, EfcValuesUpdatedEventArgs e)
+        {
+            OnValuesUpdated?.Invoke(sender, e);
+            Updated(sender, EfcEventType.ValuesUpdated, e);
+        }
+        public void ChannelChanged(object sender, EfcChannelChangedEventArgs e)
+        {
+            OnChannelChanged?.Invoke(sender, e);
+            Updated(sender, EfcEventType.ChannelChanged, e);
+        }
+        public void PatchChanged(object sender, EfcPatchChangedEventArgs e)
+        {
+            OnPatchChanged?.Invoke(sender, e);
+            Updated(sender, EfcEventType.PatchChanged, e);
+        }
+        public void SoftPatchChanged(object sender, EfcSoftPatchChangedEventArgs e)
+        {
+            OnSoftPatchChanged?.Invoke(sender, e);
+            Updated(sender, EfcEventType.SoftPatchChanged, e);
+        }
+        public void Updated(object sender, EfcEventType type, EventArgs e )
+        {
+            OnUpdate?.Invoke(sender, new EfcUpdateEventArgs(type, e));
+        }
+
         private void GeneralCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -365,6 +410,63 @@ namespace EddieFxCtrl
         {
             EfcPreferencesWindow prefDlg = new EfcPreferencesWindow( this );
             prefDlg.ShowDialog();
+        }
+
+        private void NewShowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !IsRunning;
+        }
+        private void NewShowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            // TODO: New show
+        }
+
+        private void SaveShowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        private void SaveShowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (CurrentShow.Filename == "")
+                SaveShowAsCommand_Executed(sender, e);
+            else
+                CurrentShow.SaveToFile();
+        }
+
+        private void SaveShowAsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        private void SaveShowAsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveFileDialog sfDlg = new SaveFileDialog()
+            {
+                InitialDirectory = Properties.Resources.Files_InitialDirectory,
+                Filter = Properties.Resources.FileExtensions_Show
+            };
+
+            if (sfDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                CurrentShow.SaveToFile(sfDlg.FileName);
+            }
+        }
+
+        private void OpenShowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !IsRunning;
+        }
+        private void OpenShowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OpenFileDialog ofDlg = new OpenFileDialog()
+            {
+                InitialDirectory = Properties.Resources.Files_InitialDirectory,
+                Filter = Properties.Resources.FileExtensions_Show
+            };
+
+            if (ofDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                CurrentShow.OpenFromFile(ofDlg.FileName);
+            }
         }
 
         private void ModeToolBarButton_Click(object sender, RoutedEventArgs e)
@@ -429,6 +531,77 @@ namespace EddieFxCtrl
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        /// <summary>
+        /// Deserializes an xml file into an object list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public T DeSerializeObject<T>(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName)) { return default(T); }
+
+            T objectOut = default(T);
+
+            try
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(fileName);
+                string xmlString = xmlDocument.OuterXml;
+
+                using (StringReader read = new StringReader(xmlString))
+                {
+                    Type outType = typeof(T);
+
+                    XmlSerializer serializer = new XmlSerializer(outType);
+                    using (XmlReader reader = new XmlTextReader(read))
+                    {
+                        objectOut = (T)serializer.Deserialize(reader);
+                        reader.Close();
+                    }
+
+                    read.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(ex.ToString());
+                //Log exception here
+            }
+
+            return objectOut;
+        }
+
+        /// <summary>
+        /// Serializes an object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serializableObject"></param>
+        /// <param name="fileName"></param>
+        public void SerializeObject<T>(T serializableObject, string fileName)
+        {
+            if (serializableObject == null) { return; }
+
+            try
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                XmlSerializer serializer = new XmlSerializer(serializableObject.GetType());
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    serializer.Serialize(stream, serializableObject);
+                    stream.Position = 0;
+                    xmlDocument.Load(stream);
+                    xmlDocument.Save(fileName);
+                    stream.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(ex.ToString());
+                //Log exception here
+            }
+        }
     }
 
     public static class EfcUICommands
@@ -451,6 +624,46 @@ namespace EddieFxCtrl
                 new InputGestureCollection()
                 {
                     new KeyGesture(Key.P,ModifierKeys.Control | ModifierKeys.Shift)
+                }
+            );
+        public static readonly RoutedUICommand NewShow = new RoutedUICommand
+            (
+                "_New Show",
+                "New Show",
+                typeof(EfcUICommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.N,ModifierKeys.Control)
+                }
+            );
+        public static readonly RoutedUICommand SaveShow = new RoutedUICommand
+            (
+                "_Save Show",
+                "Save Show",
+                typeof(EfcUICommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.S,ModifierKeys.Control)
+                }
+            );
+        public static readonly RoutedUICommand SaveShowAs = new RoutedUICommand
+            (
+                "Save Show _As",
+                "Save Show As",
+                typeof(EfcUICommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.S,ModifierKeys.Control|ModifierKeys.Shift)
+                }
+            );
+        public static readonly RoutedUICommand OpenShow = new RoutedUICommand
+            (
+                "_Open Show",
+                "Open Show",
+                typeof(EfcUICommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.O,ModifierKeys.Control)
                 }
             );
         public static readonly RoutedUICommand RunMode = new RoutedUICommand
@@ -527,7 +740,7 @@ namespace EddieFxCtrl
             );
         public static readonly RoutedUICommand ScreenOutput = new RoutedUICommand
             (
-                "_Output",
+                "_Control",
                 "ScreenOutput_4",
                 typeof(EfcUICommands),
                 new InputGestureCollection()

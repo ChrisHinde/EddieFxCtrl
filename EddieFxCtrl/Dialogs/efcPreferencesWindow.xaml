@@ -1,20 +1,21 @@
-﻿<Window x:Name="EfcPreferencesWin" x:Class="EddieFxCtrl.EfcPreferencesWindow"
+﻿<Window x:Name="EfcPreferencesWin" x:Class="EddieFxCtrl.Dialogs.EfcPreferencesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:EddieFxCtrl"
+        xmlns:localdlg="clr-namespace:EddieFxCtrl.Dialogs"
         xmlns:local_classes="clr-namespace:EddieFxCtrl.Classes"
         xmlns:properties="clr-namespace:EddieFxCtrl.Properties"
         mc:Ignorable="d"
         Title="EFC - Preferences" Height="530" Width="510"
         WindowStartupLocation="CenterScreen" Icon="{DynamicResource Icon_Wrench}">
     <Window.CommandBindings>
-        <CommandBinding Command="local:efcPrefUICommands.Ok" CanExecute="OkCommand_CanExecute" Executed="OkCommand_Executed" />
+        <CommandBinding Command="localdlg:efcPrefUICommands.Ok" CanExecute="OkCommand_CanExecute" Executed="OkCommand_Executed" />
     </Window.CommandBindings>
     <Window.Resources>
-        <local:IsLastModeChannelConverter x:Key="IsLastModeChannelConverter" />
+        <localdlg:IsLastModeChannelConverter x:Key="IsLastModeChannelConverter" />
         <ObjectDataProvider x:Key="MasterModes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -61,7 +62,7 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Button Name="SavePrefBtn" Grid.Column="0" IsDefault="True" Margin="3" Command="local:efcPrefUICommands.Ok">_Save</Button>
+            <Button Name="SavePrefBtn" Grid.Column="0" IsDefault="True" Margin="3" Command="localdlg:efcPrefUICommands.Ok">_Save</Button>
             <Button Name="CancelPrefBtn" Grid.Column="1" IsCancel="True" Margin="3">_Cancel</Button>
         </Grid>
         <TabControl>

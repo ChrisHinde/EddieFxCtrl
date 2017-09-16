@@ -20,11 +20,11 @@ namespace EddieFxCtrl.Classes
         public byte TotalChannelCount { get; set; }
 
         public int MaxModeId = -1;
-        public ObservableCollection<efcFixtureMode> Modes { get; set; }
+        public ObservableCollection<EfcFixtureMode> Modes { get; set; }
 
         public EfcFixtureModel()
         {
-            Modes = new ObservableCollection<efcFixtureMode>();
+            Modes = new ObservableCollection<EfcFixtureMode>();
         }
 
         public override string ToString()

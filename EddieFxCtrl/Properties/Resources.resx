@@ -127,4 +127,19 @@
   <data name="FileExtensions_Images" xml:space="preserve">
     <value>Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*</value>
   </data>
+  <data name="FileExtensions_Effects" xml:space="preserve">
+    <value>EddieFx Effect (*.eff;*.effx)|*.efc;*.efsc|All files|*.*</value>
+  </data>
+  <data name="FileExtensions_Scene" xml:space="preserve">
+    <value>EddieFx Scene (*.efs;*.efsh)|*.efc;*.efsc|All files|*.*</value>
+  </data>
+  <data name="FileExtensions_Show" xml:space="preserve">
+    <value>EddieFx Show (*.efs;*.efsh)|*.efs;*.efsh|All files|*.*</value>
+  </data>
+  <data name="Files_InitialDirectory" xml:space="preserve">
+    <value>%USERPROFILE%\My Documents</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>0.1</value>
+  </data>
 </root>

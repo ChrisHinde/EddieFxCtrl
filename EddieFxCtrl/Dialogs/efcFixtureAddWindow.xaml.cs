@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace EddieFxCtrl
+namespace EddieFxCtrl.Dialogs
 {
     /// <summary>
     /// Interaction logic for efcFixtureAddWindow.xaml
@@ -83,7 +83,7 @@ namespace EddieFxCtrl
             String name;
             UInt16 adress;
             byte universe;
-            efcFixtureMode mode;
+            EfcFixtureMode mode;
             String note;
             EfcFixture fixture;
 
@@ -92,7 +92,7 @@ namespace EddieFxCtrl
             for (int i = 0; i < fixtureCountUpDown.Value; i++)
             {
                 name = fixtureNameTextBox.Text;
-                mode = (efcFixtureMode)FixtureModeComboBox.SelectedItem;
+                mode = (EfcFixtureMode)FixtureModeComboBox.SelectedItem;
                 note = fixtureNoteTextBox.Text;
                 adress = (UInt16)(fixtureAddressUpDown.Value + i * (mode.ChannelCount + fixtureAdressGapUpDown.Value));
 
@@ -113,6 +113,7 @@ namespace EddieFxCtrl
 
                 _MainWin.CurrentShow.AddFixture(fixture);
             }
+            //_MainWin.Updated(this, EfcEventType.PatchChanged, new EfcPatchChangedEventArgs() { EventType = EfcPatch.PatchEvent.ADDED });
         }
 
 
@@ -132,13 +133,13 @@ namespace EddieFxCtrl
         }
     }
 
-    public static class efcFixtureAddUICommands
+    public static class EfcFixtureAddUICommands
     {
         public static readonly RoutedUICommand Ok = new RoutedUICommand
             (
                 "_Ok",
                 "Ok",
-                typeof(efcFixtureAddUICommands),
+                typeof(EfcFixtureAddUICommands),
                 new InputGestureCollection()
                 {
                 }

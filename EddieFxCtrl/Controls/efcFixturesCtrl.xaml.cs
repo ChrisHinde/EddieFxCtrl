@@ -12,21 +12,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EddieFxCtrl;
+using EddieFxCtrl.Dialogs;
 
-namespace EddieFxCtrl
+namespace EddieFxCtrl.Controls
 {
     /// <summary>
-    /// Interaction logic for efcFixturesCtrl.xaml
+    /// Interaction logic for EfcFixturesCtrl.xaml
     /// </summary>
-    public partial class efcFixturesCtrl : UserControl
+    public partial class EfcFixturesCtrl : UserControl
     {
         protected EfcMainWindow _MainWin = null;
 
-        public efcFixturesCtrl()
+        public EfcFixturesCtrl()
         {
             InitializeComponent();
         }
-        public efcFixturesCtrl(EfcMainWindow mainWin)
+        public EfcFixturesCtrl(EfcMainWindow mainWin)
         {
             DataContext = mainWin;
             _MainWin = mainWin;
@@ -57,16 +59,12 @@ namespace EddieFxCtrl
             fixtureAddDlg.ShowDialog();
         }
 
-        private void addFixtureButton_Click(object sender, RoutedEventArgs e)
+        private void AddFixtureButton_Click(object sender, RoutedEventArgs e)
         {
             EfcFixtureAddWindow fixtureAddDlg = new EfcFixtureAddWindow(_MainWin);
             fixtureAddDlg.ShowDialog();
         }
-
-        private void channelPanel_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
     public static class EfcFixturesCtrlUICommands
     {

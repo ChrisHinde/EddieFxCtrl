@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="EddieFxCtrl.Controls.EfcChannelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:localctrl="clr-namespace:EddieFxCtrl.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="Border" x:Key="Used">
+            <Setter Property="Background" Value="#FFC8E6CB" />
+        </Style>
+        <Style TargetType="Border" x:Key="Error">
+            <Setter Property="Background"  Value="OrangeRed" />
+        </Style>
+        <Style TargetType="Border" x:Key="Unused">
+            <Setter Property="Background"  Value="LightGray" />
+        </Style>
+        <Style TargetType="Border" x:Key="Patched">
+            <Setter Property="Background"  Value="AliceBlue" />
+        </Style>
+    </UserControl.Resources>
+    
+    <ItemsControl x:Name="ItemsCtrl" ItemsSource="{Binding Items}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid IsItemsHost="True" Columns="8"  HorizontalAlignment="Stretch" 
+                             Rows="4" VerticalAlignment="Top" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Border BorderBrush="Black" ToolTip="{Binding Label}" BorderThickness="1"  x:Name="itemBorder">
+                    <Border.Style>
+                        <Style TargetType="Border" BasedOn="{StaticResource Unused}">
+                            <!--Style.Triggers>
+                                <DataTrigger Binding="{Binding Used}" Value="True">
+                                    <Setter Property="Style" Value="{StaticResource Used}" />
+                                </DataTrigger>
+                            </Style.Triggers-->
+                        </Style>
+                    </Border.Style>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
+
+                        <TextBlock Text="{Binding Channel}" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Used}" Value="True">
+                        <Setter TargetName="itemBorder" Property="Style" Value="{StaticResource Used}" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+
+    </ItemsControl>
+</UserControl>
