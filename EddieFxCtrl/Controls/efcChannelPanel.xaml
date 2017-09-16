@@ -49,6 +49,8 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <localCtrl:EfcChannelView Grid.Row="1" x:Name="channelView" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <localCtrl:EfcChannelView Grid.Row="1" x:Name="channelView" />
+        </ScrollViewer>
     </Grid>
 </UserControl>

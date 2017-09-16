@@ -141,6 +141,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\EfcSimpleDeskCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\efcFixtureAddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -187,6 +191,9 @@
     </Compile>
     <Compile Include="Controls\EfcChannelView.xaml.cs">
       <DependentUpon>EfcChannelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EfcSimpleDeskCtrl.xaml.cs">
+      <DependentUpon>EfcSimpleDeskCtrl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\efcFixtureAddWindow.xaml.cs">
       <DependentUpon>efcFixtureAddWindow.xaml</DependentUpon>
