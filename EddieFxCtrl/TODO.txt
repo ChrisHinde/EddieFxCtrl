@@ -6,7 +6,11 @@
 -* Save companies to file
 -* Save fixture models to file
 -* Show modes when adding fixture to show
-* Check "edit" of show fixture list
+-* Save log to file
+(* Check "edit" of show fixture list ???)
 * Save show to file
 * Open show from file
-* Save log to file
+* MIDI
+* Redesign Show fixture list
+* Support for Color macros
+* Response curve for channels

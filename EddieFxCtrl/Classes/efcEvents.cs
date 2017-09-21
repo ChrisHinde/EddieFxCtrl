@@ -10,7 +10,8 @@ namespace EddieFxCtrl.Classes
         ChannelChanged = 1,
         PatchChanged = 2,
         SoftPatchChanged = 4,
-        ValuesUpdated = 8
+        ValuesUpdated = 8,
+        NewShow = 16
     }
 
     public class EfcChannelChangedEventArgs : EventArgs
@@ -34,6 +35,10 @@ namespace EddieFxCtrl.Classes
     {
 
     }
+    public class EfcNewShowEventArgs : EventArgs
+    {
+        public EfcShow Show { get; set; }
+    }
     public class EfcUpdateEventArgs : EventArgs
     {
         public EfcUpdateEventArgs( EfcEventType t, EventArgs e )
@@ -51,6 +56,7 @@ namespace EddieFxCtrl.Classes
     public delegate void EfcCSoftPatchChangedEventHandler(object sender, EfcSoftPatchChangedEventArgs e);
 
     public delegate void EfcValuesUpdatedEventHandler(object sender, EfcValuesUpdatedEventArgs e);
+    public delegate void EfcNewShowEventHandler(object sender, EfcNewShowEventArgs e);
 
     public delegate void EfcUpdateEventHandler(object sender, EfcUpdateEventArgs e);
 }

@@ -44,10 +44,11 @@ namespace EddieFxCtrl.Classes
         }
         public EfcMainWindow MainWindow
         {
+            get => _MainWin;
             set
             {
                 _MainWin = value;
-                for (byte i = 0; i < 4; i++)
+                for (byte i = 0; i < EfcMainWindow.MAX_UNIVERSES; i++)
                 {
                     _Universes[i].MainWindow = _MainWin;
                 }
@@ -62,7 +63,7 @@ namespace EddieFxCtrl.Classes
             _Name = "";
             _Universes = new EfcUniverse[EfcMainWindow.MAX_UNIVERSES];
 
-            for (byte i = 0; i < 4; i++)
+            for (byte i = 0; i < EfcMainWindow.MAX_UNIVERSES; i++)
             {
                 _Universes[i] = new EfcUniverse(i, null);
             }
@@ -71,16 +72,19 @@ namespace EddieFxCtrl.Classes
 
             _MainWin.Log("New Show (N/A)");
         }
-        public EfcShow(EfcMainWindow mainWin, String filename)
+        public EfcShow(EfcMainWindow mainWin, String filename, Boolean fillUniverses = true)
         {
             _MainWin = mainWin;
             _Filename = filename;
             _Name = Path.GetFileNameWithoutExtension(filename);
             _Universes = new EfcUniverse[EfcMainWindow.MAX_UNIVERSES];
 
-            for (byte i=0; i<4; i++)
+            if (fillUniverses)
             {
-                _Universes[i] = new EfcUniverse(i,mainWin);
+                for (byte i = 0; i < EfcMainWindow.MAX_UNIVERSES; i++)
+                {
+                    _Universes[i] = new EfcUniverse(i, mainWin);
+                }
             }
 
             Fixtures = new ObservableCollection<EfcFixture>();
@@ -95,7 +99,7 @@ namespace EddieFxCtrl.Classes
         {
             _IsSaved = false;
         }
-        
+
         public Boolean CheckFreeAddress( UInt16 addr )
         {
             return true;
@@ -120,50 +124,117 @@ namespace EddieFxCtrl.Classes
             return true;
         }
 
+        internal EfcFixture GetFixture(Guid guid)
+        {
+            return Fixtures.First(fix => fix.ID == guid);
+        }
+
+        internal EfcFixtureModel GetFixtureModel(Guid guid)
+        {
+            return _MainWin?.GetFixtureModel(guid);
+        }
+
+
+        public void SaveToFile(String filename)
+        {
+            Filename = filename;
+            SaveToFile();
+        }
         public void SaveToFile()
         {
-            _IsSaved = true;
-
             XNamespace ns = "http://diversum.se/apps/efc.xsd";
             XDocument sDoc = new XDocument();
 
             XElement sRootElm = new XElement(ns + "show");
             sRootElm.SetAttributeValue(XNamespace.Xmlns + "efc", "http://diversum.se/apps/efc.xsd");
 
+            sRootElm.SetAttributeValue("name", Name);
             sRootElm.SetAttributeValue("version", Properties.Resources.Version);
-            //sRootElm.SetAttributeValue("max_id", MaxCompanyID);
 
-            XElement fElm = new XElement(ns + "fixtures");
+            /** Add Fixtures to file **/
+            XElement currElm = new XElement(ns + "fixtures");
             XElement elm;
 
             foreach (EfcFixture fix in Fixtures)
             {
                 elm = fix.ToXML(ns);
-                fElm.Add(elm);
+                currElm.Add(elm);
             }
-
-            // TODO: Save Effects, Scenes etc
-
+            
             elm = null;
 
-            sRootElm.Add(fElm);
+            sRootElm.Add(currElm);
+
+            /** Add universes (and subordinate data, as patches) to file **/
+            currElm = new XElement(ns + "universes");
+
+            foreach (EfcUniverse uni in Universes)
+            {
+                elm = uni.ToXML(ns);
+                currElm.Add(elm);
+            }
+
+            elm = null;
+            
+            sRootElm.Add(currElm);
+
+            // TODO: Save Effects, Scenes etc
 
             sDoc.Add(sRootElm);
             sDoc.Save(_Filename);
 
+            _IsSaved = true;
+
             _MainWin?.Log("Show saved to: " + _Filename);
         }
 
-        public void SaveToFile( String filename )
+        public static EfcShow OpenFromFile( string filename, EfcMainWindow mainWin )
         {
-            Filename = filename;
-            SaveToFile();
+            if (!File.Exists(filename))
+            {
+                throw new FileNotFoundException("Couldn't open '" + filename + "' as a show, the file doesn't exist!");
+            }
+            EfcShow show = new EfcShow(mainWin, filename);
+
+            XNamespace ns = "http://diversum.se/apps/efc.xsd";
+
+            mainWin?.Log("Loading show from '" + filename + "'");
+
+            XDocument sDoc = XDocument.Load(filename);
+
+            EfcFixture fixture;
+            var fList = sDoc.Root.Element(ns + "fixtures").Elements(ns + "fixture");
+
+            foreach (XElement elm in fList)
+            {
+                fixture = EfcFixture.FromXML(elm, show, ns);
+                show.AddFixture(fixture);
+            }
+
+            EfcUniverse universe;
+            var uList = sDoc.Root.Element(ns + "universes").Elements(ns + "universe");
+
+            foreach (XElement elm in uList)
+            {
+                universe = EfcUniverse.FromXML(elm, show, ns);
+                show.SetUniverse(universe);
+            }
+
+            for (ushort i = 0; i < EfcMainWindow.MAX_UNIVERSES; i++)
+            {
+                if (show._Universes[i] == null)
+                    show._Universes[i] = new EfcUniverse(i, mainWin);
+            }
+
+            mainWin.Log("Show loaded!");
+            // TODO: Scenes etc
+
+            return show;
         }
 
-        public void OpenFromFile( string filename )
+        private void SetUniverse(EfcUniverse universe)
         {
-            // TODO: Open show from file
-            throw new NotImplementedException();
+            _Universes[universe.Universe] = universe;
         }
     }
 }

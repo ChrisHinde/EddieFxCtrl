@@ -43,6 +43,7 @@ namespace EddieFxCtrl.Controls
         }
         public EfcMainWindow MainWindow
         {
+            get => _MainWin;
             set {
                 _MainWin = value;
                 channelView.MainWindow = value;
@@ -83,6 +84,10 @@ namespace EddieFxCtrl.Controls
 
             pageComboBox.SelectedIndex = 0;
         }
+        public void ShowUpdated()
+        {
+         //   fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
+        }
 
         private void PageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -93,7 +98,7 @@ namespace EddieFxCtrl.Controls
             channelView.ChannelStart = (UInt16)(channelView.ChannelCount * page + 1);
         }
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged( String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

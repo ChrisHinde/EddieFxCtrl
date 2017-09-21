@@ -43,6 +43,13 @@
         </HierarchicalDataTemplate>
 
 
+        <ObjectDataProvider x:Key="FixtureTypes" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local_classes:EfcFixtureType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        
         <ObjectDataProvider x:Key="ChannelTypes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>

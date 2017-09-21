@@ -1,0 +1,17 @@
+﻿<Window x:Class="EddieFxCtrl.Dialogs.EfcSimpleDeskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EddieFxCtrl.Dialogs"
+        xmlns:ctrls="clr-namespace:EddieFxCtrl.Controls"
+        mc:Ignorable="d"
+        Title="Simple Desk" Height="300" HorizontalContentAlignment="Stretch" WindowStartupLocation="CenterScreen" SizeToContent="Width">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <ctrls:EfcSimpleDeskCtrl x:Name="SimpleDeskCtrl" Grid.Row="0" />
+    </Grid>
+</Window>

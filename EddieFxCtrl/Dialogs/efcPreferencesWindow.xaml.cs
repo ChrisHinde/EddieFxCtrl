@@ -114,6 +114,7 @@ namespace EddieFxCtrl.Dialogs
 
         private void FixturesTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+
             /*if (FixturesTreeView.SelectedItem is efcFixtureModel)
             {
                 FixtureModesComboBox.ItemsSource = (FixturesTreeView.SelectedItem as efcFixtureModel).Modes;
@@ -122,6 +123,7 @@ namespace EddieFxCtrl.Dialogs
 
         private void FixtureModesCombBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            _FixturesChanged = true;
             /*if (FixtureModesComboBox.SelectedItem != null)
             {
                 FixtureModeChannelsDataGrid.ItemsSource = (FixtureModesComboBox.SelectedItem as EfcFixtureMode).Channels;
@@ -228,11 +230,11 @@ namespace EddieFxCtrl.Dialogs
         {
             EfcCompany company = new EfcCompany()
             {
-                Id = _MainWin.MaxCompanyID +1,
+                Id = Guid.NewGuid(),
                 Name = "Unnamed Company"
             };
             _MainWin.Companies.Add(company);
-            _MainWin.MaxCompanyID = company.Id;
+            //_MainWin.MaxCompanyID = company.Id;
 
             _CompaniesChanged = true;
         }
@@ -269,14 +271,14 @@ namespace EddieFxCtrl.Dialogs
                 _MainWin.Log("Selected Item Is " + FixturesTreeView.SelectedItem.GetType().ToString());
             }
 
-            _MainWin.Log("MaxFixtureID:" + _MainWin.MaxFixtureID.ToString());
+            //_MainWin.Log("MaxFixtureID:" + _MainWin.MaxFixtureID.ToString());
 
             if (company == null)
                 return;
 
             EfcFixtureModel fixture = new EfcFixtureModel()
             {
-                Id=_MainWin.MaxFixtureID  +1,
+                Id = Guid.NewGuid(),
                 Name = "Unnamed fixture",
                 Company = company,
                 Manufacturer = company.Id,
@@ -285,7 +287,7 @@ namespace EddieFxCtrl.Dialogs
             company.Fixtures.Add(fixture);
             _MainWin.FixtureModels.Add(fixture);
 
-            _MainWin.MaxFixtureID = fixture.Id;
+            //_MainWin.MaxFixtureID = fixture.Id;
 
             _FixturesChanged = true;
         }

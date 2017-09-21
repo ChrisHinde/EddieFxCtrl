@@ -17,15 +17,15 @@
               <xs:element name="url" type="xs:anyURI"></xs:element>
               <xs:element name="logo" type="xs:anyURI"></xs:element>
             </xs:sequence>
-            <xs:attribute name="id" type="xs:int" />
+            <xs:attribute name="id" type="xs:string" />
           </xs:complexType>
         </xs:element>
         <xs:element name="fixture" maxOccurs="unbounded" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="name" type="xs:string"></xs:element>
-              <xs:element name="image" type="xs:anyURI"></xs:element>
               <xs:element name="description" type="xs:string"></xs:element>
+              <xs:element name="image" type="xs:anyURI"></xs:element>
               <xs:element name="modes">
                 <xs:complexType>
                   <xs:sequence>
@@ -57,8 +57,8 @@
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
-            <xs:attribute name="id" type="xs:int" />
-            <xs:attribute name="company_id" type="xs:int" />
+            <xs:attribute name="id" type="xs:string" />
+            <xs:attribute name="company_id" type="xs:string" />
             <xs:attribute name="type" type="xs:int" />
             <xs:attribute name="channels" type="xs:int" />
           </xs:complexType>

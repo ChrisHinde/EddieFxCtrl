@@ -31,6 +31,8 @@ namespace EddieFxCtrl
 
         public EfcShow CurrentShow;
 
+        protected UInt16 _MasterValue;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event EfcValuesUpdatedEventHandler OnValuesUpdated;
@@ -38,6 +40,16 @@ namespace EddieFxCtrl
         public event EfcPatchChangedEventHandler OnPatchChanged;
         public event EfcCSoftPatchChangedEventHandler OnSoftPatchChanged;
         public event EfcUpdateEventHandler OnUpdate;
+
+        public UInt16 MasterValue
+        {
+            get => _MasterValue;
+            set
+            {
+                _MasterValue = value;
+                NotifyPropertyChanged("MasterValue");
+            }
+        }
 
         private bool _blackoutActive;
         public bool BlackoutActive
@@ -76,15 +88,10 @@ namespace EddieFxCtrl
 
         public EfcMainWindow()
         {
+            _MasterValue = 255;
+
             InitializeComponent();
 
-            CurrentShow = new EfcShow(this);
-            CurrentShow.Name = "New Show";
-
-            FixturesCtrl.SetMainWin(this);
-
-            Log("EFC Started!");
-            
             LoadData();
 
             //MainTabCtrl.SelectedIndex = INFO;
@@ -94,6 +101,15 @@ namespace EddieFxCtrl
             IsRunning = false;
             BlackoutActive = Properties.Settings.Default.BlackoutDefault;
             Log("Blackout Default:" + BlackoutActive.ToString());
+
+            CurrentShow = new EfcShow(this)
+            {
+                Name = "New Show"
+            };
+            FixturesCtrl.SetMainWin(this);
+
+            Log("EFC Started!");
+            
         }
 
         public void Log(string info)
@@ -139,14 +155,14 @@ namespace EddieFxCtrl
             Log("Loading company data from: " + Properties.Settings.Default.CompaniesFile);
 
             XDocument cDoc = XDocument.Load(Properties.Settings.Default.CompaniesFile);
-            MaxCompanyID = Convert.ToInt32(cDoc.Element(ns + "data").Attribute("max_id").Value);
+            //MaxCompanyID = Convert.ToInt32(cDoc.Element(ns + "data").Attribute("max_id").Value);
 
             var cList = cDoc.Root.Elements(ns + "company");
             foreach (XElement el in cList)
             {
                 EfcCompany comp = new EfcCompany()
                 {
-                    Id = Convert.ToInt32(el.Attribute("id").Value),
+                    Id = new Guid(el.Attribute("id").Value),
                     Name = el.Element(ns + "name").Value,
                     Url = el.Element(ns + "url").Value,
                     Logo = el.Element(ns + "logo").Value
@@ -184,9 +200,9 @@ namespace EddieFxCtrl
             Log("Loading fixture data from: " + Properties.Settings.Default.FixturesFile);
 
             XDocument fDoc = XDocument.Load(Properties.Settings.Default.FixturesFile);
-            MaxFixtureID = Convert.ToInt32(fDoc.Element(ns + "data").Attribute("max_id").Value);
+            //MaxFixtureID = new Guid(fDoc.Element(ns + "data").Attribute("max_id").Value);
             
-            Log("MaxFixID::" + MaxFixtureID.ToString());
+            //Log("MaxFixID::" + MaxFixtureID.ToString());
 
             //MaxFixtureID = 0;
             var fList = fDoc.Root.Elements(ns + "fixture");
@@ -194,9 +210,9 @@ namespace EddieFxCtrl
             {
                 EfcFixtureModel fix = new EfcFixtureModel()
                 {
-                    Id = Convert.ToInt32(el.Attribute("id").Value),
+                    Id = new Guid(el.Attribute("id").Value),
                     Type = (EfcFixtureType)Convert.ToInt32(el.Attribute("type").Value),
-                    Manufacturer = Convert.ToInt32(el.Attribute("company_id").Value),
+                    Manufacturer = new Guid(el.Attribute("company_id").Value),
                     Name = el.Element(ns + "name").Value,
                     Description = el.Element(ns + "description").Value,
                     Image = el.Element(ns + "image").Value
@@ -268,6 +284,11 @@ namespace EddieFxCtrl
             }
         }
 
+        public EfcFixtureModel GetFixtureModel(Guid guid)
+        {
+            return Companies.SelectMany(c => c.Fixtures).First(fix => fix.Id == guid);
+        }
+
         internal void SaveCompanyData()
         {
             XNamespace ns = "http://diversum.se/apps/efc.xsd";
@@ -309,7 +330,7 @@ namespace EddieFxCtrl
             fRootElm.SetAttributeValue(XNamespace.Xmlns + "efc", "http://diversum.se/apps/efc.xsd");
             
             fRootElm.SetAttributeValue("type", "fixtures");
-            fRootElm.SetAttributeValue("max_id", MaxFixtureID);
+            //fRootElm.SetAttributeValue("max_id", MaxFixtureID);
 
             XElement fElm;
             XElement fModes;
@@ -465,7 +486,9 @@ namespace EddieFxCtrl
 
             if (ofDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                CurrentShow.OpenFromFile(ofDlg.FileName);
+                CurrentShow = EfcShow.OpenFromFile(ofDlg.FileName, this);
+                Updated(this, EfcEventType.NewShow, new EfcNewShowEventArgs() { Show = CurrentShow });
+                //FixturesCtrl.ShowUpdated();
             }
         }
 
@@ -491,9 +514,15 @@ namespace EddieFxCtrl
         private void ScreenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string name = (e.Command as RoutedUICommand).Name;
-            int tab = Convert.ToInt32( name.Substring(name.IndexOf('_')+1) );
+            int tab = Convert.ToInt32(name.Substring(name.IndexOf('_') + 1));
 
             MainTabCtrl.SelectedIndex = tab;
+        }
+        private void SimpleDeskCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            EfcSimpleDeskWindow simpleDeskWin = new EfcSimpleDeskWindow(this);
+            simpleDeskWin.Show();
+
         }
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -518,7 +547,16 @@ namespace EddieFxCtrl
 
         private void SaveLogBtn_Click(object sender, RoutedEventArgs e)
         {
+            SaveFileDialog sfDlg = new SaveFileDialog()
+            {
+                InitialDirectory = Properties.Resources.Files_InitialDirectory,
+                Filter = "*|*"
+            };
 
+            if (sfDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                File.WriteAllText(sfDlg.FileName, logTextBox.Text);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -531,77 +569,7 @@ namespace EddieFxCtrl
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        /// <summary>
-        /// Deserializes an xml file into an object list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public T DeSerializeObject<T>(string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName)) { return default(T); }
-
-            T objectOut = default(T);
-
-            try
-            {
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.Load(fileName);
-                string xmlString = xmlDocument.OuterXml;
-
-                using (StringReader read = new StringReader(xmlString))
-                {
-                    Type outType = typeof(T);
-
-                    XmlSerializer serializer = new XmlSerializer(outType);
-                    using (XmlReader reader = new XmlTextReader(read))
-                    {
-                        objectOut = (T)serializer.Deserialize(reader);
-                        reader.Close();
-                    }
-
-                    read.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log(ex.ToString());
-                //Log exception here
-            }
-
-            return objectOut;
-        }
-
-        /// <summary>
-        /// Serializes an object.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="serializableObject"></param>
-        /// <param name="fileName"></param>
-        public void SerializeObject<T>(T serializableObject, string fileName)
-        {
-            if (serializableObject == null) { return; }
-
-            try
-            {
-                XmlDocument xmlDocument = new XmlDocument();
-                XmlSerializer serializer = new XmlSerializer(serializableObject.GetType());
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    serializer.Serialize(stream, serializableObject);
-                    stream.Position = 0;
-                    xmlDocument.Load(stream);
-                    xmlDocument.Save(fileName);
-                    stream.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log(ex.ToString());
-                //Log exception here
-            }
-        }
+        
     }
 
     public static class EfcUICommands
@@ -747,6 +715,16 @@ namespace EddieFxCtrl
                 {
                     new KeyGesture(Key.D9,ModifierKeys.Control | ModifierKeys.Shift),
                     new KeyGesture(Key.D5,ModifierKeys.Control | ModifierKeys.Shift)
+                }
+            );
+        public static readonly RoutedUICommand SimpleDesk = new RoutedUICommand
+            (
+                "_Simple desk",
+                "Simple Desk",
+                typeof(EfcUICommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.D,ModifierKeys.Control | ModifierKeys.Shift)
                 }
             );
     }

@@ -9,8 +9,8 @@ namespace EddieFxCtrl.Classes
 {
     public class EfcFixtureModel
     {
-        public int Id { get; set; }
-        public int Manufacturer { get; set; }
+        public Guid Id { get; set; }
+        public Guid Manufacturer { get; set; }
         public EfcFixtureType Type { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
@@ -25,6 +25,11 @@ namespace EddieFxCtrl.Classes
         public EfcFixtureModel()
         {
             Modes = new ObservableCollection<EfcFixtureMode>();
+        }
+
+        public EfcFixtureMode GetMode(int id)
+        {
+            return Modes.First(mode => mode.Id == id);
         }
 
         public override string ToString()

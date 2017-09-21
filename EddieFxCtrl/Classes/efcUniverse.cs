@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace EddieFxCtrl.Classes
 {
@@ -31,6 +32,11 @@ namespace EddieFxCtrl.Classes
         {
             get => _PatchInfos;
         }
+        public UInt16 Universe
+        {
+            get => _Universe;
+            set => _Universe = value; 
+        }
 
         public EfcMainWindow MainWindow { set => _MainWin = value; }
         public UInt16 MaxAddress { get => _MaxAddress; }
@@ -41,9 +47,9 @@ namespace EddieFxCtrl.Classes
         {
             _Universe = 0;
 
-            ChannelValues = new byte[512];
-            _Patches = new EfcPatch[512];
-            _PatchInfos = new EfcPatchInfo[512];
+            ChannelValues = new byte[513];
+            _Patches = new EfcPatch[513];
+            _PatchInfos = new EfcPatchInfo[513];
             _SoftPatches = new ObservableCollection<EfcSoftPatch>();
         }
         public EfcUniverse( UInt16 universe, EfcMainWindow mainWin )
@@ -52,10 +58,15 @@ namespace EddieFxCtrl.Classes
             _MainWin = mainWin;
             _Label = "";
 
-            ChannelValues = new byte[512];
-            _Patches = new EfcPatch[512];
-            _PatchInfos = new EfcPatchInfo[512];
+            ChannelValues = new byte[513];
+            _Patches = new EfcPatch[513];
+            _PatchInfos = new EfcPatchInfo[513];
             _SoftPatches = new ObservableCollection<EfcSoftPatch>();
+            
+            for (UInt16 c=1; c<=512; c++)
+            {
+                _PatchInfos[c] = new EfcPatchInfo(c);
+            }
         }
 
         public void AddSoftPatch( UInt16 inAddr, UInt16 outAddr )
@@ -137,21 +148,96 @@ namespace EddieFxCtrl.Classes
 
            return _Patches[addr];
         }
-        /*
-        public EfcPatchInfo GetPatchInfo( UInt16 addr )
+
+        public XElement ToXML(XNamespace ns)
         {
-            EfcPatchInfo pi = new EfcPatchInfo();
+            XElement uElm = new XElement(ns + "universe");
+            uElm.SetAttributeValue("universe", Universe);
 
-            EfcPatch patch = GetPatch(addr, out bool isSoftPatch, out EfcSoftPatch softPatch);
+            XElement currElm = new XElement(ns + "patches");
+            XElement elm;
 
-            if (patch != null)
-                pi.Patch = patch;
+            foreach (EfcPatch patch in _Patches)
+            {
+                if (patch == null) continue;
 
-            if (isSoftPatch)
-                pi.SoftPatch = softPatch;
-            
+                elm = patch.ToXML(ns);
+                currElm.Add(elm);
+            }
+            uElm.Add(currElm);
 
-            return pi;
-        }*/
+            currElm = new XElement(ns + "softpatches");
+
+            foreach (EfcSoftPatch patch in _SoftPatches)
+            {
+                elm = patch.ToXML(ns);
+                currElm.Add(elm);
+            }
+            uElm.Add(currElm);
+
+            return uElm;
+        }
+        public static EfcUniverse FromXML(XElement elm, EfcShow show, XNamespace ns)
+        {
+            EfcUniverse universe = new EfcUniverse()
+            {
+                _Universe = Convert.ToByte(elm.Attribute("universe").Value),
+                _MainWin = show.MainWindow
+            };
+
+            EfcPatch patch;
+            EfcPatchInfo pi;
+            var pList = elm.Element(ns + "patches").Elements(ns + "patch");
+
+            foreach (XElement pElm in pList)
+            {
+                patch = EfcPatch.FromXML(pElm, show, universe, ns);
+                pi = new EfcPatchInfo()
+                {
+                    Patch = patch
+                };
+
+                universe._Patches[patch.Channel] = patch;
+                universe._PatchInfos[patch.Channel] = pi;
+
+                
+
+                if (patch.Channel > universe._MaxAddress)
+                    universe._MaxAddress = patch.Channel;
+            }
+
+            EfcSoftPatch sp;
+            var spList = elm.Element(ns + "softpatches").Elements(ns + "softpatch");
+
+            foreach (XElement pElm in spList)
+            {
+                sp = EfcSoftPatch.FromXML(pElm, show, universe, ns);
+
+                universe._SoftPatches.Add(sp);
+
+                //universe._PatchInfos[sp.In] = pi;
+            }
+
+            show.MainWindow.PatchChanged(universe, new EfcPatchChangedEventArgs() { EventType = EfcPatch.PatchEvent.ADDED, Patch = null });
+
+            return universe;
+        }
+
+        /*
+public EfcPatchInfo GetPatchInfo( UInt16 addr )
+{
+   EfcPatchInfo pi = new EfcPatchInfo();
+
+   EfcPatch patch = GetPatch(addr, out bool isSoftPatch, out EfcSoftPatch softPatch);
+
+   if (patch != null)
+       pi.Patch = patch;
+
+   if (isSoftPatch)
+       pi.SoftPatch = softPatch;
+
+
+   return pi;
+}*/
     }
 }

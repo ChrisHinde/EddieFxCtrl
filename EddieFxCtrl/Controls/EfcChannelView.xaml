@@ -20,40 +20,69 @@
             <Setter Property="Background"  Value="AliceBlue" />
         </Style>
     </UserControl.Resources>
-    
-    <ItemsControl x:Name="ItemsCtrl" ItemsSource="{Binding Items}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <UniformGrid IsItemsHost="True" Columns="8"  HorizontalAlignment="Stretch" 
-                             Rows="4" VerticalAlignment="Top" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
+    <!--UniformGrid-->
+        <!--ScrollViewer HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="Yellow" -->
+            <!--Grid>
 
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Border BorderBrush="Black" ToolTip="{Binding Label}" BorderThickness="1"  x:Name="itemBorder">
-                    <Border.Style>
-                        <Style TargetType="Border" BasedOn="{StaticResource Unused}">
-                            <!--Style.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions-->
+
+            <ItemsControl x:Name="ItemsCtrl" ItemsSource="{Binding Items}" >
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <Border
+                    BorderThickness="{TemplateBinding Border.BorderThickness}"
+                    Padding="{TemplateBinding Control.Padding}"
+                    BorderBrush="{TemplateBinding Border.BorderBrush}"
+                    Background="{TemplateBinding Panel.Background}"
+                    SnapsToDevicePixels="True">
+                        <ScrollViewer
+                        Padding="{TemplateBinding Control.Padding}"
+                        Focusable="False">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding 
+                                               UIElement.SnapsToDevicePixels}"/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </ItemsControl.Template>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid IsItemsHost="True" Columns="8"  HorizontalAlignment="Stretch" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" ToolTip="{Binding Label}" BorderThickness="1" x:Name="itemBorder">
+                            <Border.Style>
+                                <Style TargetType="Border" BasedOn="{StaticResource Unused}">
+                                    <!--Style.Triggers>
                                 <DataTrigger Binding="{Binding Used}" Value="True">
                                     <Setter Property="Style" Value="{StaticResource Used}" />
                                 </DataTrigger>
                             </Style.Triggers-->
-                        </Style>
-                    </Border.Style>
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                </Style>
+                            </Border.Style>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
 
-                        <TextBlock Text="{Binding Channel}" HorizontalAlignment="Center" />
-                        <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
-                    </StackPanel>
-                </Border>
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding Used}" Value="True">
-                        <Setter TargetName="itemBorder" Property="Style" Value="{StaticResource Used}" />
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
+                                <TextBlock Text="{Binding Channel}" HorizontalAlignment="Center" FontWeight="Bold" />
+                                <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Used}" Value="True">
+                                <Setter TargetName="itemBorder" Property="Style" Value="{StaticResource Used}" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
 
-    </ItemsControl>
+            </ItemsControl>
+            <!--/Grid-->
+        <!--/ScrollViewer-->
+    <!--/UniformGrid-->
 </UserControl>

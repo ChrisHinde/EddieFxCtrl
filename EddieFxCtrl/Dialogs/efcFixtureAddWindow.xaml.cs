@@ -72,13 +72,14 @@ namespace EddieFxCtrl.Dialogs
         }
         private void OkCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            AddFixture();
+            if (!AddFixture())
+                return;
 
             DialogResult = true;
             Close();
         }
 
-        private void AddFixture()
+        private Boolean AddFixture()
         {
             String name;
             UInt16 adress;
@@ -89,33 +90,47 @@ namespace EddieFxCtrl.Dialogs
 
             universe = (byte)(fixtureUniverseComboBox.SelectedIndex + 1);
 
-            for (int i = 0; i < fixtureCountUpDown.Value; i++)
+            try
             {
-                name = fixtureNameTextBox.Text;
-                mode = (EfcFixtureMode)FixtureModeComboBox.SelectedItem;
-                note = fixtureNoteTextBox.Text;
-                adress = (UInt16)(fixtureAddressUpDown.Value + i * (mode.ChannelCount + fixtureAdressGapUpDown.Value));
-
-                if (i > 0)
+                for (int i = 0; i < fixtureCountUpDown.Value; i++)
                 {
-                    name += String.Format(".{0:000}", i);
+                    name = fixtureNameTextBox.Text;
+                    mode = (EfcFixtureMode)FixtureModeComboBox.SelectedItem;
+                    note = fixtureNoteTextBox.Text;
+                    adress = (UInt16)(fixtureAddressUpDown.Value + i * (mode.ChannelCount + fixtureAdressGapUpDown.Value));
+
+                    if (i > 0)
+                    {
+                        name += String.Format(".{0:000}", i);
+                    }
+
+                    fixture = new EfcFixture()
+                    {
+                        Name = name,
+                        Address = adress,
+                        Universe = universe,
+                        Mode = mode,
+                        Note = note,
+                        Fixture = _SelectedFixture
+                    };
+
+                    _MainWin.CurrentShow.AddFixture(fixture);
                 }
-
-                fixture = new EfcFixture()
-                {
-                    Name = name,
-                    Address = adress,
-                    Universe = universe,
-                    Mode = mode,
-                    Note = note,
-                    Fixture = _SelectedFixture
-                };
-
-                _MainWin.CurrentShow.AddFixture(fixture);
+            } catch (EfcAddressInUseException e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
             }
             //_MainWin.Updated(this, EfcEventType.PatchChanged, new EfcPatchChangedEventArgs() { EventType = EfcPatch.PatchEvent.ADDED });
-        }
 
+            return true;
+        }/*
+        public EfcFixtureModel GetFixtureModel(Guid guid)
+        {
+            EfcFixtureModel fixture;
+
+            return fixture;
+        }*/
 
         private void CalculateAdressRange()
         {

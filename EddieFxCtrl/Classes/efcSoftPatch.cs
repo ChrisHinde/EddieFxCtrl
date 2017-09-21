@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace EddieFxCtrl.Classes
 {
@@ -42,5 +43,28 @@ namespace EddieFxCtrl.Classes
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        
+        
+        public XElement ToXML(XNamespace ns)
+        {
+            XElement elm = new XElement(ns + "softpatch");
+
+            elm.SetAttributeValue("in", _In);
+            elm.SetAttributeValue("out", _Out);
+            elm.SetAttributeValue("enabled", _Enabled);
+
+            return elm;
+        }
+        public static EfcSoftPatch FromXML(XElement elm, EfcShow show, EfcUniverse universe, XNamespace ns)
+        {
+            EfcSoftPatch patch = new EfcSoftPatch()
+            {
+                _In = Convert.ToUInt16(elm.Attribute("in").Value),
+                _Out = Convert.ToUInt16(elm.Attribute("out").Value),
+                _Enabled = Convert.ToBoolean(elm.Attribute("enabled").Value)
+            };
+
+            return patch;
+        }
     }
 }

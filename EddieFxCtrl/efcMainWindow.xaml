@@ -21,6 +21,7 @@
         <CommandBinding Command="local:EfcUICommands.ScreenScenes" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.ScreenInfo" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
         <CommandBinding Command="local:EfcUICommands.ScreenOutput" CanExecute="GeneralCommand_CanExecute" Executed="ScreenCommand_Executed" />
+        <CommandBinding Command="local:EfcUICommands.SimpleDesk" CanExecute="GeneralCommand_CanExecute" Executed="SimpleDeskCommand_Executed" />
 
         <CommandBinding Command="localCtrl:EfcFixturesCtrlUICommands.AddFixture" CanExecute="AddFixture_CanExecute" Executed="AddFixture_Executed" />
 
@@ -49,6 +50,8 @@
                     <MenuItem Command="local:EfcUICommands.ScreenInfo" />
                     <MenuItem Command="local:EfcUICommands.ScreenOutput" />
                 </MenuItem>
+                <Separator />
+                <MenuItem Command="local:EfcUICommands.SimpleDesk" />
             </MenuItem>
             <MenuItem Header="_Commands">
                 <MenuItem Command="local:EfcUICommands.RunMode" />
@@ -144,7 +147,7 @@
                 <localCtrl:EfcFixturesCtrl x:Name="FixturesCtrl" Height="auto" Width="auto" />
             </TabItem>
             <TabItem Header="_Effects" Name="EffectsTab">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid />
             </TabItem>
             <TabItem Header="_Scenes" Name="ScenesTab">
                 <Grid/>
@@ -191,11 +194,10 @@
                         </Grid.RowDefinitions>
                         <Label Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" Padding="0">Master</Label>
                         <Label Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" Padding="0">Fade</Label>
-                        <Slider x:Name="masterSlider" Grid.Row="1" Maximum="255" LargeChange="5" Orientation="Vertical" SmallChange="1" TickFrequency="5" TickPlacement="Both" Margin="2" />
-                        <Slider x:Name="fadeSlider" Grid.Row="1" Grid.Column="1" Maximum="255" LargeChange="5" Orientation="Vertical" SmallChange="1" TickFrequency="5" TickPlacement="Both" Margin="2" />
-                        <xctk:IntegerUpDown Name="masterUpDown" Grid.Row="2" Minimum="0" Maximum="255" Margin="2" Value="{Binding ElementName=masterSlider,Path=Value, UpdateSourceTrigger=LostFocus}" >
-                        </xctk:IntegerUpDown>
-                        <xctk:IntegerUpDown Name="FadeUpDown" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding ElementName=fadeSlider,Path=Value, UpdateSourceTrigger=LostFocus}">
+
+                        <localCtrl:EfcMasterSliderCtrl x:Name="MasterSlider" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" />
+                        <Slider x:Name="FadeSlider" Grid.Row="1" Grid.Column="1" Maximum="255" LargeChange="5" Orientation="Vertical" SmallChange="1" TickFrequency="10" TickPlacement="Both" Margin="2" HorizontalAlignment="Center" />
+                        <xctk:IntegerUpDown Name="FadeUpDown" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding ElementName=FadeSlider,Path=Value, UpdateSourceTrigger=LostFocus}">
                         </xctk:IntegerUpDown>
                         <ComboBox x:Name="FadeSpeedUnitComboBox" Grid.Row="3" Grid.Column="1" >
                             <ComboBoxItem Content="s/10" ToolTip="10th of seconds"/>

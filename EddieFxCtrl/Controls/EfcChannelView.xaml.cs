@@ -17,6 +17,17 @@ using System.Windows.Shapes;
 
 namespace EddieFxCtrl.Controls
 {
+    /*public class EfcChannelWrap
+    {
+        public UInt16 Channel { get; set; }
+        public EfcPatchInfo PatchInfo { get; set; }
+        public Boolean HasPatchInfo { get => PatchInfo != null; }
+        public Boolean Used { get => HasPatchInfo ? PatchInfo.Used : false; }
+
+        public String Label { get => HasPatchInfo ? PatchInfo.Label : "Not used"; }
+        public byte Value { get => HasPatchInfo ? PatchInfo.Value : (byte)0; }
+    }*/
+
     /// <summary>
     /// Interaction logic for EfcChannelView.xaml
     /// </summary>
@@ -24,7 +35,7 @@ namespace EddieFxCtrl.Controls
     {
         private EfcMainWindow _MainWin;
 
-        protected UInt16 _ChannelCount = 32;
+        protected UInt16 _ChannelCount = 128;
         protected UInt16 _ChannelStart = 1;
         protected byte _Universe = 1;
         protected bool _Paused = false;
@@ -45,6 +56,7 @@ namespace EddieFxCtrl.Controls
             {
                 if (value > 512)
                     throw new Exception("The start channel value is too high (>512)! This shouldn't happen!");
+
                 _ChannelStart = value;
                 Update();
             }
@@ -68,6 +80,7 @@ namespace EddieFxCtrl.Controls
 
         public EfcMainWindow MainWindow
         {
+            get => _MainWin;
             set
             {
                 _MainWin = value;
@@ -75,7 +88,7 @@ namespace EddieFxCtrl.Controls
 
                 //_MainWin.Log("Setting source for EfcChannelView to Patches");
 
-                //ItemsCtrl.ItemsSource =  _MainWin.CurrentShow.Universes[_Universe].Patches;
+                //ItemsCtrl.ItemsSource =  _MainWin.CurrentShow.Universes[_Universe].PatchInfos;
                 Update();
             }
         }
@@ -85,12 +98,11 @@ namespace EddieFxCtrl.Controls
             InitializeComponent();
             Items = new ObservableCollection<EfcPatchInfo>();
             ItemsCtrl.ItemsSource = Items;
-
         }
 
         private void _OnUpdate(object sender, EfcUpdateEventArgs e)
         {
-            if (_Paused || e.Args == null)
+            if ( (e.Args == null) || (_Paused && e.Type != EfcEventType.NewShow ) )
                 return;
 
             switch (e.Type)
@@ -114,6 +126,9 @@ namespace EddieFxCtrl.Controls
                          !InRange(((EfcSoftPatchChangedEventArgs)e.Args).ChannelOut))
                         return;
                     break;
+                case EfcEventType.NewShow:
+                    Update(true);
+                    break;
             }
 
             //var thread = new Thread(Draw);
@@ -121,18 +136,31 @@ namespace EddieFxCtrl.Controls
             //Update();
         }
 
-        private void Update()
+        private void Update( Boolean force = false )
         {
+            //EfcChannelWrap chWrap;
+
             _MainWin?.Log("Channel View update!");
 
-            if (_Paused || _MainWin == null) return;
+            if ( (_Paused && !force) || _MainWin == null) return;
 
             Items.Clear();
 
-            for (UInt16 i = _ChannelStart; i < _ChannelStart + _ChannelCount; i++)
+            Items = new ObservableCollection<EfcPatchInfo>( _MainWin.CurrentShow.Universes[_Universe].PatchInfos.Skip(_ChannelStart).Take(_ChannelCount) );
+            ItemsCtrl.ItemsSource = Items;
+/*
+            for (UInt16 c = _ChannelStart; c < _ChannelStart + _ChannelCount; c++)
             {
-                Items.Add(_MainWin.CurrentShow.Universes[_Universe].PatchInfos[i]);
-            }
+               /* chWrap = new EfcChannelWrap()
+                {
+                    Channel = c
+                };
+
+                if (_MainWin.CurrentShow.Universes[_Universe].PatchInfos[c] != null)
+                    chWrap.PatchInfo = _MainWin.CurrentShow.Universes[_Universe].PatchInfos[c];* /
+
+                //Items.Add(_MainWin.CurrentShow.Universes[_Universe].PatchInfos[c]);
+            }*/
         }
 
         private bool InRange(ushort channel)

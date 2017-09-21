@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EddieFxCtrl;
 using EddieFxCtrl.Dialogs;
+using EddieFxCtrl.Classes;
 
 namespace EddieFxCtrl.Controls
 {
@@ -32,15 +33,25 @@ namespace EddieFxCtrl.Controls
         {
             DataContext = mainWin;
             _MainWin = mainWin;
+            _MainWin.OnUpdate += _MainWin_OnUpdate;
 
             InitializeComponent();
 
             channelPanel.MainWindow = mainWin;
             fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
         }
+
+        private void _MainWin_OnUpdate(object sender, EfcUpdateEventArgs e)
+        {
+            if (e.Type == EfcEventType.NewShow)
+                fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
+        }
+
         public void SetMainWin(EfcMainWindow mainWin)
         {
             _MainWin = mainWin;
+            _MainWin.OnUpdate += _MainWin_OnUpdate;
+
             channelPanel.MainWindow = mainWin;
             fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
         }
@@ -65,6 +76,11 @@ namespace EddieFxCtrl.Controls
             fixtureAddDlg.ShowDialog();
         }
         
+        public void ShowUpdated()
+        {
+            fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
+            channelPanel.ShowUpdated();
+        }
     }
     public static class EfcFixturesCtrlUICommands
     {

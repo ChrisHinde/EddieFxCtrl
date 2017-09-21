@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="efc"
+    targetNamespace="http://diversum.se/apps/efc.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://diversum.se/apps/efc.xsd"
+    xmlns:efc="http://diversum.se/apps/efc.xsd"
+    xmlns:mstns="http://tempuri.org/efcData.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="show">
+    <xs:complexType>
+      <xs:sequence>
+
+        <xs:element name="fixtures" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+
+            <xs:sequence>
+              <xs:element name="fixture" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+
+                  <xs:sequence>
+                    <xs:element name="name"></xs:element>
+                    <xs:element name="note"></xs:element>
+                    <xs:element name="fixtureModel"></xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:string" />
+                  <xs:attribute name="universe" type="xs:int" />
+                  <xs:attribute name="address" type="xs:int" />
+                  <xs:attribute name="mode" type="xs:int" />
+
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="universes" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="universe" maxOccurs="unbounded" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+
+                    <xs:element name="patches" maxOccurs="1" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="patch" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="channel" type="xs:integer" maxOccurs="1" minOccurs="1" />
+                                <xs:element name="fixture" type="xs:string" maxOccurs="1" minOccurs="1" />
+                              </xs:sequence>
+
+                              <xs:attribute name="universe" type="xs:int" />
+                              <xs:attribute name="enabled" type="xs:boolean" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="softpatches" maxOccurs="1" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="softpatch" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute name="in" type="xs:int" />
+                              <xs:attribute name="out" type="xs:int" />
+                              <xs:attribute name="enabled" type="xs:boolean" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+
+                  </xs:sequence>
+
+                  <xs:attribute name="universe" type="xs:int" />
+                  <xs:attribute name="label" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        
+      </xs:sequence>
+
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="version" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

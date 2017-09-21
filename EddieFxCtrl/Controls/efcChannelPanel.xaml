@@ -9,7 +9,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
-            <RowDefinition />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <ToolBarTray  Grid.Row="0">
             <ToolBar HorizontalAlignment="Left" >
@@ -23,8 +23,8 @@
                 <Label Content="Per page:" />
                 <ComboBox Name="channelsPerPageComboBox" Margin="0" Width="40" SelectionChanged="ChannelsPerPageComboBox_SelectionChanged">
                     <ComboBoxItem Content="32"/>
-                    <ComboBoxItem Content="64" IsSelected="True"/>
-                    <ComboBoxItem Content="128" />
+                    <ComboBoxItem Content="64" />
+                    <ComboBoxItem Content="128"  IsSelected="True" />
                     <ComboBoxItem Content="256"/>
                     <ComboBoxItem Content="512"/>
                 </ComboBox>
@@ -49,8 +49,16 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <localCtrl:EfcChannelView Grid.Row="1" x:Name="channelView" />
-        </ScrollViewer>
+        <!--ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" CanContentScroll="True"-->
+            <!--Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions-->
+                <localCtrl:EfcChannelView  Grid.Column="0" Grid.Row="1" x:Name="channelView" />
+            <!--Grid-->
+        <!--/-->
     </Grid>
 </UserControl>

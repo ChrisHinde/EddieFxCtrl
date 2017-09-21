@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace EddieFxCtrl.Classes
 {
@@ -64,6 +65,31 @@ namespace EddieFxCtrl.Classes
         {
             _Channel = 0;
             _Value = 0;
+        }
+
+        public XElement ToXML(XNamespace ns)
+        {
+            XElement elm = new XElement(ns + "patch");
+            elm.SetAttributeValue("universe", _Universe.Universe);
+            elm.SetAttributeValue("enabled", Enabled);
+
+            elm.Add(new XElement(ns + "channel", Channel));
+            elm.Add(new XElement(ns + "fixture", Fixture.ID));
+
+            return elm;
+        }
+        public static EfcPatch FromXML(XElement elm, EfcShow show, EfcUniverse universe, XNamespace ns)
+        {
+            EfcPatch patch = new EfcPatch()
+            {
+                _Universe = universe,
+                _Enabled = Convert.ToBoolean(elm.Attribute("enabled").Value),
+                _Channel = Convert.ToUInt16(elm.Element(ns + "channel").Value)
+            };
+
+            patch._Fixture = show.GetFixture(new Guid(elm.Element(ns + "fixture").Value));
+
+            return patch;
         }
     }
 }
