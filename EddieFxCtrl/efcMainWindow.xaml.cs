@@ -21,7 +21,7 @@ namespace EddieFxCtrl
     public partial class EfcMainWindow : Window, INotifyPropertyChanged
     {
         public const int FIXTURES = 0, EFFECTS = 1, SCENES = 2, INFO = 3, OUTPUT = 4;
-        public const int MAX_UNIVERSES = 4;
+        public const byte MAX_UNIVERSES = 4;
         
         public ObservableCollection<EfcCompany> Companies;
         public int MaxCompanyID = 0;
@@ -109,7 +109,21 @@ namespace EddieFxCtrl
             FixturesCtrl.SetMainWin(this);
 
             Log("EFC Started!");
-            
+
+            StartOutput(); // Right place for this?????????
+        }
+
+        public void StartOutput()
+        {
+            try
+            {
+                EfcOutputHandler.Initiate(this, 2);
+
+                EfcOutputHandler.Start();
+            } catch (Exception e)
+            {
+                Log(e.ToString());
+            }
         }
 
         public void Log(string info)
