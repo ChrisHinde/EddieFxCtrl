@@ -38,7 +38,10 @@ namespace EddieFxCtrl.Classes
 
             _UniverseCount = (unicount == 0) ? EfcMainWindow.MAX_UNIVERSES : unicount;
 
+            _Buffer = new byte[_UniverseCount+1,513];
+            _MaxChannel = new UInt16[_UniverseCount+1];
 
+            for (int u = 0; u <= _UniverseCount; u++)
             {
                 _MaxChannel[u] = 32;
             }
@@ -85,6 +88,7 @@ namespace EddieFxCtrl.Classes
                         _Buffer[u, c] = _MainWin.CurrentShow.Universes[u].PatchInfos[c].Value;
                     }
                 }
+                //Thread.Sleep(500);
             }
         }
         public static void OutputLoop()
@@ -95,10 +99,15 @@ namespace EddieFxCtrl.Classes
             {
                 for (u = 1; u <= _UniverseCount; u++)
                 {
+                    //Console.Write("U{0}: ", u);
                     for (c = 1; c <= _MaxChannel[u]; c++)
                     {
+                    //    Console.Write("{0:000},", _Buffer[u, c]);
                     }
+                   // Console.WriteLine(";");
                 }
+                //Console.WriteLine("--------");
+                Thread.Sleep(100);
             }
         }
     }
