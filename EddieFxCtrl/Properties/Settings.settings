@@ -23,5 +23,33 @@
     <Setting Name="PriorityMode" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="MODList" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Did you know? Eddie is never going to give you up, never going to let you down!&lt;/string&gt;
+  &lt;string&gt;Did you know? Eddie's BFF is Marvin. But Marvin just gets more depressed when he talks to Eddie.&lt;/string&gt;
+  &lt;string&gt;Did you know that Eddie is always happy to please you! Your will is Eddie's command!&lt;/string&gt;
+  &lt;string&gt;Eddie doesn't know what the meaning of life really is, or why it's so important. But Eddie heard that it had something to do with 42.&lt;/string&gt;
+  &lt;string&gt;Good bye Friend! Hope to see you soon!&lt;/string&gt;
+  &lt;string&gt;Eddie saw a man in a blue phone box once. Eddie didn't know phone boxes could fly through time and relative dimenson in space.&lt;/string&gt;
+  &lt;string&gt;Eddie doesn't need a doctor, but if you do Eddie knows which Doctor to call!&lt;/string&gt;
+  &lt;string&gt;Eddie met a man named Zaphod once, they didn't get along well.&lt;/string&gt;
+  &lt;string&gt;If Eddie ever have a problem with ghosts, Eddie knows who to call!&lt;/string&gt;
+  &lt;string&gt;Na na na na Na na na na BATMAN! - Shhh... Eddie's favorite show just started! Bye!&lt;/string&gt;
+  &lt;string&gt;Eddie had an affair with an AI cald GLADoS once. It didn't end well! Neurotoxins were involved..&lt;/string&gt;
+  &lt;string&gt;Eddie doeesn't know where the plans for the Death star is, but even if Eddie did, Eddie wouldn't tell you that the droid has them...&lt;/string&gt;
+  &lt;string&gt;1 monkey, 2 monkeys, 3 monkeys ..... 12 monkeys!?&lt;/string&gt;
+  &lt;string&gt;Eddie is actually from the year 2999, but Eddie hitched a ride with an DeLorean once and ended up here!&lt;/string&gt;
+  &lt;string&gt;Eddie doesn't like white mice, they get into the wiring and messes things up!&lt;/string&gt;
+  &lt;string&gt;Follow the white rabbit!&lt;/string&gt;
+  &lt;string&gt;It's all an illusion!&lt;/string&gt;
+  &lt;string&gt;Mini MIDI Mici!&lt;/string&gt;
+  &lt;string&gt;Light'em up!&lt;/string&gt;
+  &lt;string&gt;Eddie loves to make a scene!&lt;/string&gt;
+  &lt;string&gt;Eddie can help you bring light on any situation!&lt;/string&gt;
+  &lt;string&gt;Eddie loves light work!&lt;/string&gt;
+  &lt;string&gt;The cake is a lie!&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

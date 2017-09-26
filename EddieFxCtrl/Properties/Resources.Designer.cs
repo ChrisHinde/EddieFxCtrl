@@ -150,6 +150,15 @@ namespace EddieFxCtrl.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MODList {
+            get {
+                return ResourceManager.GetString("MODList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 0.1.
         /// </summary>
         internal static string Version {

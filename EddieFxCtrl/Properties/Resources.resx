@@ -142,4 +142,7 @@
   <data name="Version" xml:space="preserve">
     <value>0.1</value>
   </data>
+  <data name="MODList" xml:space="preserve">
+    <value />
+  </data>
 </root>

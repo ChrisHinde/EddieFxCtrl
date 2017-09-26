@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D728C77F-8780-4A79-A628-F6DD1E479D6D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EddieFxCtrl</RootNamespace>
     <AssemblyName>EddieFxCtrl</AssemblyName>
@@ -192,6 +192,7 @@
     <Compile Include="Classes\efcFixtureMode.cs" />
     <Compile Include="Classes\efcFixtureModel.cs" />
     <Compile Include="Classes\efcFixtureType.cs" />
+    <Compile Include="Classes\EfcMOD.cs" />
     <Compile Include="Classes\efcModes.cs" />
     <Compile Include="Classes\EfcOutputHandler.cs" />
     <Compile Include="Classes\efcPatch.cs" />
