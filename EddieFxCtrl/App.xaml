@@ -28,6 +28,8 @@
         <BitmapImage x:Key="Icon_List" UriSource="Resources/Images/ic_list_black_48dp.png" />
         <BitmapImage x:Key="Icon_View_List" UriSource="Resources/Images/ic_view_list_black_48dp.png" />
         <BitmapImage x:Key="Icon_Grid_List" UriSource="Resources/Images/ic_view_module_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Freeze_Off" UriSource="Resources/Images/ic_change_history_black_48dp.png" />
+        <BitmapImage x:Key="Icon_Freeze_On" UriSource="Resources/Images/ic_report_problem_black_48dp.png" />
 
 
         <DataTemplate x:Key="CompanyItemTemplate">

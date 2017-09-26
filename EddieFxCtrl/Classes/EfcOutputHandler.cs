@@ -69,6 +69,7 @@ namespace EddieFxCtrl.Classes
             _RunOutput = false;
             _RunRead = false;
 
+            _ReadThread.Abort();
             _OutputThread.Abort();
         }
         public static void Pause()
@@ -97,6 +98,13 @@ namespace EddieFxCtrl.Classes
 
             while (_RunOutput)
             {
+                Thread.Sleep(10);
+                if (_MainWin.IsFreezed)
+                {
+                    Thread.Sleep(100);
+                    continue;
+                }
+
                 for (u = 1; u <= _UniverseCount; u++)
                 {
                     //Console.Write("U{0}: ", u);
@@ -107,7 +115,6 @@ namespace EddieFxCtrl.Classes
                    // Console.WriteLine(";");
                 }
                 //Console.WriteLine("--------");
-                Thread.Sleep(100);
             }
         }
     }

@@ -79,6 +79,20 @@ namespace EddieFxCtrl
                 }
             }
         }
+        private bool _isFreezed;
+        public bool IsFreezed
+        {
+            get { return _isFreezed; }
+            set
+            {
+                if (value != _isFreezed)
+                {
+                    _isFreezed = value;
+                    Log("Freeze:" + _isFreezed.ToString());
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         private EfcPriorityMode _PriorityMode;
         public EfcPriorityMode PriorityMode
         {
@@ -98,6 +112,7 @@ namespace EddieFxCtrl
             //InfoTabControl.SelectedIndex = 1;
             PriorityMode = EfcPriorityMode.LTP;
 
+            IsFreezed = false;
             IsRunning = false;
             BlackoutActive = Properties.Settings.Default.BlackoutDefault;
             Log("Blackout Default:" + BlackoutActive.ToString());
@@ -554,6 +569,21 @@ namespace EddieFxCtrl
             FixturesCtrl?.AddFixture_Executed(sender, e);
         }
 
+        private void FreezeToolBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsFreezed = !IsFreezed;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            EfcOutputHandler.Stop();
+        }
+
+        private void FixturesCtrl_Loaded()
+        {
+
+        }
+
         private void ClearLogBtn_Click(object sender, RoutedEventArgs e)
         {
             logTextBox.Text = "";
@@ -575,7 +605,7 @@ namespace EddieFxCtrl
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (Xceed.Wpf.Toolkit.MessageBox.Show("Do you really want to close Eddie Fx Controller?", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+            if (Xceed.Wpf.Toolkit.MessageBox.Show("Do you really want to close Eddie Fx Controller?\n\n- - - -\n\n" + EfcMOD.GetMOD(), "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
                 e.Cancel = true;
         }
 
