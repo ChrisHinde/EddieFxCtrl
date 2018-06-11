@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace EddieFxCtrl.Classes
 {
-    public class EfcScene
+    public class EfcCue
     {
-                                                                     
     }
 }

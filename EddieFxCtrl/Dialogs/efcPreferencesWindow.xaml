@@ -338,6 +338,14 @@
             </TabItem>
             <TabItem Name="InputPrefTab" Header="_Input">
                 <TabControl>
+                    <TabItem Name="MIDIInputPrefTab" Header="_MIDI">
+                        <Grid Background="#FFE5E5E5"/>
+                    </TabItem>
+                    <TabItem Name="KeyboardInputPrefTab" Header="_Keyboard">
+                        <Grid Background="#FFE5E5E5"/>
+                    </TabItem>
+                    <TabItem Name="DMXInputPrefTab" Header="_DMX">
+                    </TabItem>
                     <TabItem Name="EddieKBDInputPrefTab" Header="Eddie _KBD">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -355,11 +363,31 @@
                             </ComboBox>
                         </Grid>
                     </TabItem>
-                    <TabItem Name="DMXInputPrefTab" Header="_DMX">
-                    </TabItem>
                 </TabControl>
             </TabItem>
             <TabItem Name="OutputPrefTab" Header="_Output">
+                <TabControl>
+                    <TabItem Name="DMXOutputPrefTab" Header="_DMX">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="20" />
+                            </Grid.RowDefinitions>
+                            <Label Name="ComDMXOutputPrefLbl" Margin="0" Padding="0">COM Port:</Label>
+                            <ComboBox Name="ComDMXOutputPrefCmbBox" Grid.Column="1">
+                            </ComboBox>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Name="MIDIOutputPrefTab" Header="_MIDI">
+                        <Grid Background="#FFE5E5E5"/>
+                    </TabItem>
+                </TabControl>
             </TabItem>
             <TabItem Name="NetworkPrefTab" Header="_Network">
                 <TabControl>

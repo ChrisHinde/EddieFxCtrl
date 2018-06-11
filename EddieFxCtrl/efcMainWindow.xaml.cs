@@ -1,4 +1,5 @@
-﻿using EddieFxCtrl.Classes;
+﻿using EddieFxCtrl.Classes; 
+using EddieFxCtrl.Classes.IO;
 using EddieFxCtrl.Dialogs;
 using System;
 using System.Collections.ObjectModel;
@@ -29,9 +30,9 @@ namespace EddieFxCtrl
         public ObservableCollection<EfcFixtureModel> FixtureModels;
         public int MaxFixtureID = 0;
 
-        public EfcShow CurrentShow;
+        //public EfcShow CurrentShow;
 
-        protected UInt16 _MasterValue;
+        //protected UInt16 _MasterValue;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -41,7 +42,7 @@ namespace EddieFxCtrl
         public event EfcCSoftPatchChangedEventHandler OnSoftPatchChanged;
         public event EfcUpdateEventHandler OnUpdate;
 
-        public UInt16 MasterValue
+        /*public UInt16 MasterValue
         {
             get => _MasterValue;
             set
@@ -98,19 +99,21 @@ namespace EddieFxCtrl
         {
             get => _PriorityMode;
             set => _PriorityMode = value;
-        }
+        }*/
 
         public EfcMainWindow()
         {
-            _MasterValue = 255;
+//            _MasterValue = 255;
 
             InitializeComponent();
+
+            EfcMain.Initialize(this);
 
             LoadData();
 
             //MainTabCtrl.SelectedIndex = INFO;
             //InfoTabControl.SelectedIndex = 1;
-            PriorityMode = EfcPriorityMode.LTP;
+            /*PriorityMode = EfcPriorityMode.LTP;
 
             IsFreezed = false;
             IsRunning = false;
@@ -120,7 +123,7 @@ namespace EddieFxCtrl
             CurrentShow = new EfcShow(this)
             {
                 Name = "New Show"
-            };
+            };*/
             FixturesCtrl.SetMainWin(this);
 
             Log("EFC Started!");
@@ -464,7 +467,7 @@ namespace EddieFxCtrl
 
         private void NewShowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !IsRunning;
+            e.CanExecute = !EfcMain.IsRunning;
         }
         private void NewShowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -477,10 +480,10 @@ namespace EddieFxCtrl
         }
         private void SaveShowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (CurrentShow.Filename == "")
+            if (EfcMain.CurrentShow.Filename == "")
                 SaveShowAsCommand_Executed(sender, e);
             else
-                CurrentShow.SaveToFile();
+                EfcMain.CurrentShow.SaveToFile();
         }
 
         private void SaveShowAsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -497,13 +500,13 @@ namespace EddieFxCtrl
 
             if (sfDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                CurrentShow.SaveToFile(sfDlg.FileName);
+                EfcMain.CurrentShow.SaveToFile(sfDlg.FileName);
             }
         }
 
         private void OpenShowCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !IsRunning;
+            e.CanExecute = !EfcMain.IsRunning;
         }
         private void OpenShowCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -515,29 +518,29 @@ namespace EddieFxCtrl
 
             if (ofDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                CurrentShow = EfcShow.OpenFromFile(ofDlg.FileName, this);
-                Updated(this, EfcEventType.NewShow, new EfcNewShowEventArgs() { Show = CurrentShow });
+                EfcMain.CurrentShow = EfcShow.OpenFromFile(ofDlg.FileName, this);
+                Updated(this, EfcEventType.NewShow, new EfcNewShowEventArgs() { Show = EfcMain.CurrentShow });
                 //FixturesCtrl.ShowUpdated();
             }
         }
 
         private void ModeToolBarButton_Click(object sender, RoutedEventArgs e)
         {
-            IsRunning = !IsRunning;
+            EfcMain.IsRunning = !EfcMain.IsRunning;
         }
         private void RunModeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            IsRunning = !IsRunning;
+            EfcMain.IsRunning = !EfcMain.IsRunning;
         }
 
         private void BlackoutCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            BlackoutActive = !BlackoutActive;
+            EfcMain.BlackoutActive = !EfcMain.BlackoutActive;
         }
 
         private void BlackoutOutputTB_Click(object sender, RoutedEventArgs e)
         {
-            BlackoutActive = !BlackoutActive;
+            EfcMain.BlackoutActive = !EfcMain.BlackoutActive;
         }
 
         private void ScreenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -561,7 +564,7 @@ namespace EddieFxCtrl
 
         public void AddFixture_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = ! IsRunning; // TODO: Change to check more
+            e.CanExecute = !EfcMain.IsRunning; // TODO: Change to check more?
         }
 
         private void AddFixture_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -571,18 +574,14 @@ namespace EddieFxCtrl
 
         private void FreezeToolBarButton_Click(object sender, RoutedEventArgs e)
         {
-            IsFreezed = !IsFreezed;
+            EfcMain.IsFreezed = !EfcMain.IsFreezed;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             EfcOutputHandler.Stop();
         }
-
-        private void FixturesCtrl_Loaded()
-        {
-
-        }
+        
 
         private void ClearLogBtn_Click(object sender, RoutedEventArgs e)
         {

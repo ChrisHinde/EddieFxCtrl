@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EddieFxCtrl.Classes
+namespace EddieFxCtrl.Classes.IO
 {
-    public class EfcScene
+    class EfcArtNetHandler
     {
-                                                                     
     }
 }

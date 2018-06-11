@@ -120,22 +120,23 @@ namespace EddieFxCtrl.Properties {
             "g>Good bye Friend! Hope to see you soon!</string>\r\n  <string>Eddie saw a man in " +
             "a blue phone box once. Eddie didn\'t know phone boxes could fly through time and " +
             "relative dimenson in space.</string>\r\n  <string>Eddie doesn\'t need a doctor, but" +
-            " if you do Eddie knows which Doctor to call!</string>\r\n  <string>Eddie met a man" +
-            " named Zaphod once, they didn\'t get along well.</string>\r\n  <string>If Eddie eve" +
-            "r have a problem with ghosts, Eddie knows who to call!</string>\r\n  <string>Na na" +
-            " na na Na na na na BATMAN! - Shhh... Eddie\'s favorite show just started! Bye!</s" +
-            "tring>\r\n  <string>Eddie had an affair with an AI cald GLADoS once. It didn\'t end" +
-            " well! Neurotoxins were involved..</string>\r\n  <string>Eddie doeesn\'t know where" +
-            " the plans for the Death star is, but even if Eddie did, Eddie wouldn\'t tell you" +
-            " that the droid has them...</string>\r\n  <string>1 monkey, 2 monkeys, 3 monkeys ." +
-            ".... 12 monkeys!?</string>\r\n  <string>Eddie is actually from the year 2999, but " +
-            "Eddie hitched a ride with an DeLorean once and ended up here!</string>\r\n  <strin" +
-            "g>Eddie doesn\'t like white mice, they get into the wiring and messes things up!<" +
-            "/string>\r\n  <string>Follow the white rabbit!</string>\r\n  <string>It\'s all an ill" +
-            "usion!</string>\r\n  <string>Mini MIDI Mici!</string>\r\n  <string>Light\'em up!</str" +
-            "ing>\r\n  <string>Eddie loves to make a scene!</string>\r\n  <string>Eddie can help " +
-            "you bring light on any situation!</string>\r\n  <string>Eddie loves light work!</s" +
-            "tring>\r\n  <string>The cake is a lie!</string>\r\n</ArrayOfString>")]
+            " if you do Eddie knows The Doctor!</string>\r\n  <string>Eddie met a man named Zap" +
+            "hod once, they didn\'t get along well.</string>\r\n  <string>If Eddie ever have a p" +
+            "roblem with ghosts, Eddie knows who to call!</string>\r\n  <string>Na na na na Na " +
+            "na na na BATMAN! - Shhh... Eddie\'s favorite show just started! Bye!</string>\r\n  " +
+            "<string>Eddie had an affair with an AI cald GLADoS once. It didn\'t end well! Neu" +
+            "rotoxins were involved..</string>\r\n  <string>Eddie doeesn\'t know where the plans" +
+            " for the Death star is, but even if Eddie did, Eddie wouldn\'t tell you that the " +
+            "droid has them...</string>\r\n  <string>1 monkey, 2 monkeys, 3 monkeys ..... 12 mo" +
+            "nkeys!?</string>\r\n  <string>Eddie is actually from the year 2999, but Eddie hitc" +
+            "hed a ride with an DeLorean once and ended up here!</string>\r\n  <string>Eddie do" +
+            "esn\'t like white mice, they get into the wiring and messes things up!</string>\r\n" +
+            "  <string>Follow the white rabbit!</string>\r\n  <string>It\'s all an illusion!</st" +
+            "ring>\r\n  <string>Mini MIDI Mici!</string>\r\n  <string>Light\'em up!</string>\r\n  <s" +
+            "tring>Eddie loves to make a scene!</string>\r\n  <string>Eddie can help you bring " +
+            "light on any situation!</string>\r\n  <string>Eddie loves light work!</string>\r\n  " +
+            "<string>The cake is a lie!</string>\r\n  <string>Magnets! How do they work?</strin" +
+            "g>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection MODList {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["MODList"]));

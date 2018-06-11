@@ -35,7 +35,7 @@ namespace EddieFxCtrl.Controls
             set
             {
                 _MainWin = value;
-                MasterCtrl.Master = _MainWin.MasterValue;
+                MasterCtrl.Master = EfcMain.MasterValue;
                 _MainWin.OnUpdate += _MainWin_OnUpdate;
 
                 AddChannelSliders();
@@ -60,7 +60,7 @@ namespace EddieFxCtrl.Controls
 
         protected void AddChannelSliders()
         {
-            slidePanel.ItemsSource = new ObservableCollection<EfcPatchInfo>(_MainWin.CurrentShow.Universes[_Universe].PatchInfos.Skip(_ChannelStart).Take(_ChannelCount));
+            slidePanel.ItemsSource = new ObservableCollection<EfcPatchInfo>(EfcMain.CurrentShow.Universes[_Universe].PatchInfos.Skip(_ChannelStart).Take(_ChannelCount));
             //slidePanel.Items = Items;
             /*
             for (int c=1; c<=count; c++)

@@ -52,8 +52,8 @@ namespace EddieFxCtrl.Controls
             }
         }
         /*
-        public String Info {
             get => _Info;
+        public String Info {
             set
             {
                 _Info = value;

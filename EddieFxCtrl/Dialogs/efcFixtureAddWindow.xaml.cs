@@ -39,8 +39,8 @@ namespace EddieFxCtrl.Dialogs
             _MainWin = mainWin;
             FixturesTreeView.ItemsSource = mainWin.Companies;
 
-            fixtureAddressUpDown.Value = mainWin.CurrentShow.MaxAddress + 1;
-            fixtureCountUpDown.Maximum = 512 - mainWin.CurrentShow.MaxAddress;
+            fixtureAddressUpDown.Value = EfcMain.CurrentShow.MaxAddress + 1;
+            fixtureCountUpDown.Maximum = 512 - EfcMain.CurrentShow.MaxAddress;
         }
 
         private void FixturesTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -114,7 +114,7 @@ namespace EddieFxCtrl.Dialogs
                         Fixture = _SelectedFixture
                     };
 
-                    _MainWin.CurrentShow.AddFixture(fixture);
+                    EfcMain.CurrentShow.AddFixture(fixture);
                 }
             } catch (EfcAddressInUseException e)
             {

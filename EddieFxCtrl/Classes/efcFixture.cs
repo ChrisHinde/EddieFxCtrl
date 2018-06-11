@@ -67,8 +67,15 @@ namespace EddieFxCtrl.Classes
                 _Name = elm.Element(ns + "name").Value,
                 _Note = elm.Element(ns + "note").Value,
 
-                _Fixture = show.GetFixtureModel(new Guid(elm.Element(ns + "fixtureModel").Value))
             };
+            try
+            {
+                fixture._Fixture = show.GetFixtureModel(new Guid(elm.Element(ns + "fixtureModel").Value));
+            }
+            catch (Exception e)
+            {
+                
+            }
 
             fixture._Mode = fixture._Fixture.GetMode(Convert.ToInt32(elm.Attribute("mode").Value));
 

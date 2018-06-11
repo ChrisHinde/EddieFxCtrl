@@ -38,13 +38,13 @@ namespace EddieFxCtrl.Controls
             InitializeComponent();
 
             channelPanel.MainWindow = mainWin;
-            fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
+            fixtureList.ItemsSource = EfcMain.CurrentShow.Fixtures;
         }
 
         private void _MainWin_OnUpdate(object sender, EfcUpdateEventArgs e)
         {
             if (e.Type == EfcEventType.NewShow)
-                fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
+                fixtureList.ItemsSource = EfcMain.CurrentShow.Fixtures;
         }
 
         public void SetMainWin(EfcMainWindow mainWin)
@@ -53,7 +53,7 @@ namespace EddieFxCtrl.Controls
             _MainWin.OnUpdate += _MainWin_OnUpdate;
 
             channelPanel.MainWindow = mainWin;
-            fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
+            fixtureList.ItemsSource = EfcMain.CurrentShow.Fixtures;
         }
 
         private void AddFixture_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -78,7 +78,7 @@ namespace EddieFxCtrl.Controls
         
         public void ShowUpdated()
         {
-            fixtureList.ItemsSource = _MainWin.CurrentShow.Fixtures;
+            fixtureList.ItemsSource = EfcMain.CurrentShow.Fixtures;
             channelPanel.ShowUpdated();
         }
     }

@@ -211,7 +211,7 @@ namespace EddieFxCtrl.Controls
             String valueStr = "0" + (_DisplayPercentage ? "%" : "");
             if (_MainWin != null)
             {
-                EfcUniverse universe = _MainWin.CurrentShow.Universes[_Universe];
+                EfcUniverse universe = EfcMain.CurrentShow.Universes[_Universe];
                 EfcPatch patch = universe.GetPatch(channel, out bool isSoftPatch, out EfcSoftPatch softPatch);
 
                 if (patch != null)
@@ -286,7 +286,7 @@ namespace EddieFxCtrl.Controls
             String valueStr = "0" + (_DisplayPercentage ? "%" : "");
             if (_MainWin != null)
             {
-                EfcUniverse universe = _MainWin.CurrentShow.Universes[_Universe];
+                EfcUniverse universe = EfcMain.CurrentShow.Universes[_Universe];
                 EfcPatch patch = universe.GetPatch(channel, out bool isSoftPatch, out EfcSoftPatch softPatch);
 
                 if (patch != null)

@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EddieFxCtrl.Classes
+namespace EddieFxCtrl.Classes.IO
 {
+    public delegate void EfcOutputEvent(byte universe, byte[] data, UInt16 count);
+
     public class EfcOutputHandler
     {
         protected static Boolean _Initated = false;
@@ -19,6 +21,8 @@ namespace EddieFxCtrl.Classes
         protected static Boolean _RunOutput;
         protected static Thread _ReadThread;
         protected static Thread _OutputThread;
+
+        public event EfcOutputEvent OnOutput;
 
         public static EfcMainWindow MainWin
         {
@@ -38,7 +42,7 @@ namespace EddieFxCtrl.Classes
 
             _UniverseCount = (unicount == 0) ? EfcMainWindow.MAX_UNIVERSES : unicount;
 
-            _Buffer = new byte[_UniverseCount+1,513];
+            _Buffer = new byte[_UniverseCount+1,512];
             _MaxChannel = new UInt16[_UniverseCount+1];
 
             for (int u = 0; u <= _UniverseCount; u++)
@@ -86,10 +90,11 @@ namespace EddieFxCtrl.Classes
                 {
                     for (UInt16 c = 1; c <= _MaxChannel[u]; c++)
                     {
-                        _Buffer[u, c] = _MainWin.CurrentShow.Universes[u].PatchInfos[c].Value;
+                        if (EfcMain.CurrentShow.Universes[u].PatchInfos[c] != null)
+                            _Buffer[u, c-1] = EfcMain.CurrentShow.Universes[u].PatchInfos[c].Value;
                     }
                 }
-                //Thread.Sleep(500);
+                Thread.Sleep(10);
             }
         }
         public static void OutputLoop()
@@ -99,7 +104,7 @@ namespace EddieFxCtrl.Classes
             while (_RunOutput)
             {
                 Thread.Sleep(10);
-                if (_MainWin.IsFreezed)
+                if (EfcMain.IsFreezed)
                 {
                     Thread.Sleep(100);
                     continue;

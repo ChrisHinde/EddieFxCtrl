@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EddieFxCtrl.Classes
+namespace EddieFxCtrl.Plugin
 {
-    public class EfcScene
+    public interface IEfcInputPlugin : IEfcPlugin
     {
-                                                                     
+
     }
 }

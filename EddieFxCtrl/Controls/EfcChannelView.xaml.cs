@@ -146,7 +146,7 @@ namespace EddieFxCtrl.Controls
 
             Items.Clear();
 
-            Items = new ObservableCollection<EfcPatchInfo>( _MainWin.CurrentShow.Universes[_Universe].PatchInfos.Skip(_ChannelStart).Take(_ChannelCount) );
+            Items = new ObservableCollection<EfcPatchInfo>( EfcMain.CurrentShow.Universes[_Universe].PatchInfos.Skip(_ChannelStart).Take(_ChannelCount) );
             ItemsCtrl.ItemsSource = Items;
 /*
             for (UInt16 c = _ChannelStart; c < _ChannelStart + _ChannelCount; c++)
